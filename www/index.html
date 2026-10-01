@@ -1,0 +1,3248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#c9607a">
+<title>Kirat Boutique — Mobile Manager</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --primary: #c9607a;
+    --primary-light: #faeef1;
+    --primary-deep: #a53b56;
+    --gold: #c9933a;
+    --gold-light: #fbf5eb;
+    --dark: #1a1721;
+    --dark-muted: #5e596b;
+    --light-muted: #9590a3;
+    --bg: #f8f6f8;
+    --surface: #ffffff;
+    --surface-elevated: #ffffff;
+    --border: #ede8ef;
+    --border-light: #f3eff4;
+    --success: #289960;
+    --success-light: #e8f7ef;
+    --warn: #d97706;
+    --warn-light: #fffbeb;
+    --danger: #dc2626;
+    --danger-light: #fef2f2;
+    --info: #2563eb;
+    --info-light: #eff6ff;
+    --radius-sm: 8px;
+    --radius: 14px;
+    --radius-lg: 20px;
+    --shadow-sm: 0 1px 3px rgba(26,23,33,0.05);
+    --shadow: 0 4px 14px rgba(26,23,33,0.07);
+    --shadow-up: 0 -4px 20px rgba(26,23,33,0.08);
+    --safe-bottom: env(safe-area-inset-bottom, 16px);
+    --safe-top: env(safe-area-inset-top, 0px);
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.45;
+    padding-bottom: calc(75px + var(--safe-bottom));
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  input, textarea, select, button {
+    user-select: auto;
+    -webkit-user-select: auto;
+    font-family: inherit;
+  }
+
+  /* ── MOBILE CONTAINER ── */
+  .mobile-frame {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    background: var(--bg);
+  }
+
+  /* ── ICONS HELPER ── */
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25em;
+    height: 1.25em;
+    vertical-align: middle;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── TOP HEADER ── */
+  .m-header {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: calc(10px + var(--safe-top)) 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand-area {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .brand-logo-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    box-shadow: 0 3px 8px rgba(201,96,122,0.35);
+  }
+  .brand-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+    letter-spacing: -0.2px;
+    line-height: 1.15;
+  }
+  .brand-text span {
+    font-size: 10.5px;
+    color: var(--primary);
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sync-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: var(--border-light);
+    color: var(--dark-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sync-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #9ca3af;
+  }
+  .sync-dot.online { background: #10b981; box-shadow: 0 0 6px #10b981; }
+  .sync-dot.syncing { background: #f59e0b; animation: pulse 1s infinite; }
+
+  .user-avatar-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .user-avatar-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ── BOTTOM NAV BAR ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    padding: 6px 12px calc(6px + var(--safe-bottom));
+  }
+  .nav-inner {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    color: var(--light-muted);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 6px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 54px;
+    position: relative;
+  }
+  .nav-item svg {
+    width: 21px;
+    height: 21px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    transition: all 0.2s;
+  }
+  .nav-item.active {
+    color: var(--primary);
+  }
+  .nav-item.active svg {
+    stroke: var(--primary);
+    transform: scale(1.08);
+  }
+  .nav-badge-pill {
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    background: var(--danger);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 10px;
+    min-width: 16px;
+    text-align: center;
+  }
+
+  /* ── FLOATING ACTION BUTTON (FAB) ── */
+  .fab-btn {
+    position: fixed;
+    right: 18px;
+    bottom: calc(76px + var(--safe-bottom));
+    z-index: 90;
+    width: 54px;
+    height: 54px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 6px 20px rgba(201,96,122,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .fab-btn:active {
+    transform: scale(0.92);
+  }
+
+  /* ── MAIN CONTENT VIEWS ── */
+  .m-content {
+    padding: 14px 14px 20px;
+  }
+  .view-tab {
+    display: none;
+    animation: fadeIn 0.2s ease-out;
+  }
+  .view-tab.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── HERO BANNER / GREETING ── */
+  .hero-greeting {
+    background: linear-gradient(135deg, #2d1825 0%, #17121b 100%);
+    border-radius: var(--radius-lg);
+    padding: 18px 18px 16px;
+    color: #fff;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .hero-greeting::after {
+    content: "✂";
+    position: absolute;
+    right: 10px;
+    bottom: -15px;
+    font-size: 110px;
+    color: rgba(255, 255, 255, 0.04);
+    pointer-events: none;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .hero-sub {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .hero-badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .hero-chip {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── STATS TILES ── */
+  .stats-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-card-m {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 13px 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-card-m.highlight {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+    color: #fff;
+    border: none;
+  }
+  .stat-m-label {
+    font-size: 11px;
+    color: var(--dark-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+  }
+  .stat-card-m.highlight .stat-m-label {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .stat-m-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .stat-m-sub {
+    font-size: 11px;
+    color: var(--light-muted);
+    margin-top: 3px;
+  }
+  .stat-card-m.highlight .stat-m-sub {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* ── FINANCIAL QUICK STRIP (Kirat boutique profit & workers) ── */
+  .profit-strip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .strip-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .strip-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--dark-muted);
+    text-transform: uppercase;
+  }
+  .strip-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+    gap: 4px;
+  }
+  .strip-col p { font-size: 10.5px; color: var(--light-muted); font-weight: 500; margin-bottom: 2px; }
+  .strip-col h4 { font-size: 14px; font-weight: 700; }
+  .col-rev { color: var(--dark); }
+  .col-exp { color: var(--danger); }
+  .col-profit { color: var(--success); }
+
+  /* ── FILTER CHIPS ── */
+  .chips-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .chips-scroll::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    padding: 6px 13px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark-muted);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .filter-chip.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(201,96,122,0.35);
+  }
+
+  /* ── SEARCH INPUT ── */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 12px;
+  }
+  .search-wrap input {
+    width: 100%;
+    padding: 10px 14px 10px 38px;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-size: 13.5px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .search-wrap input:focus {
+    border-color: var(--primary);
+  }
+  .search-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--light-muted);
+    pointer-events: none;
+  }
+
+  /* ── BOOKING CARDS (Mobile Optimized) ── */
+  .order-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    transition: transform 0.15s;
+  }
+  .order-card:active {
+    transform: scale(0.99);
+  }
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .order-id-cust {
+    flex: 1;
+  }
+  .order-id-tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 2px 6px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .order-cust-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .order-work-title {
+    font-size: 13px;
+    color: var(--dark-muted);
+    font-weight: 500;
+  }
+  .badges-cluster {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  .m-badge {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: capitalize;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .badge-pending { background: var(--warn-light); color: var(--warn); }
+  .badge-in-progress { background: var(--info-light); color: var(--info); }
+  .badge-done { background: var(--success-light); color: var(--success); }
+  .badge-cancelled { background: var(--danger-light); color: var(--danger); }
+  .badge-paid { background: var(--success-light); color: var(--success); }
+  .badge-partial { background: var(--primary-light); color: var(--primary); }
+  .badge-unpaid { background: var(--warn-light); color: var(--warn); }
+
+  .order-dates-row {
+    display: flex;
+    gap: 12px;
+    background: var(--border-light);
+    padding: 7px 10px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 11.5px;
+  }
+  .date-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--dark-muted);
+  }
+  .date-item strong {
+    color: var(--dark);
+  }
+  .due-urgent {
+    color: var(--danger);
+    font-weight: 700;
+  }
+
+  /* ── WORKER & MATERIAL BREAKDOWN STRIP IN CARD ── */
+  .fin-summary-box {
+    background: #fdfafb;
+    border: 1px solid #f6e6ec;
+    border-radius: 9px;
+    padding: 8px 10px;
+    margin: 8px 0;
+  }
+  .fin-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+  .fin-line.last {
+    margin-bottom: 0;
+    padding-top: 4px;
+    border-top: 1px dashed #eedce2;
+    font-weight: 700;
+  }
+  .fin-workers-preview {
+    font-size: 11px;
+    color: var(--dark-muted);
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .worker-tag-pill {
+    background: #f1ecf5;
+    padding: 1px 7px;
+    border-radius: 10px;
+    color: #4c3b63;
+    font-size: 10.5px;
+  }
+
+  /* ── QUICK ACTIONS BAR IN CARD ── */
+  .card-action-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+  }
+  .btn-action-pill {
+    flex: 1;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-action-pill:active {
+    background: var(--border-light);
+  }
+  .btn-action-pill.primary {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+  .btn-action-pill.whatsapp {
+    background: #25d366;
+    color: #fff;
+    border-color: #25d366;
+    flex: 0 0 40px;
+    padding: 7px 0;
+  }
+  .btn-action-pill.call {
+    flex: 0 0 40px;
+    padding: 7px 0;
+    color: var(--info);
+  }
+
+  /* ── PAYMENTS SECTION ── */
+  .pay-subtabs {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 3px;
+    margin-bottom: 14px;
+  }
+  .pay-subtab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border: none;
+    background: none;
+    color: var(--dark-muted);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pay-subtab-btn.active {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(201,96,122,0.3);
+  }
+
+  .ledger-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .ledger-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .ledger-name {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .ledger-role {
+    font-size: 11.5px;
+    color: var(--dark-muted);
+  }
+  .ledger-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    background: var(--border-light);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    margin: 8px 0;
+  }
+  .ledger-stat-item p { font-size: 10px; color: var(--light-muted); font-weight: 600; text-transform: uppercase; }
+  .ledger-stat-item h5 { font-size: 13.5px; font-weight: 700; }
+
+  /* ── BOTTOM SHEET MODAL (Mobile Native Slide-up) ── */
+  .sheet-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 15, 23, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .sheet-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .sheet-modal {
+    background: var(--surface);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 22px 22px 0 0;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-up);
+    transform: translateY(100%);
+    transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+  .sheet-overlay.active .sheet-modal {
+    transform: translateY(0);
+  }
+
+  .sheet-drag-handle {
+    width: 42px;
+    height: 4px;
+    border-radius: 2px;
+    background: #d8d3df;
+    margin: 10px auto 4px;
+    flex-shrink: 0;
+  }
+  .sheet-header {
+    padding: 10px 18px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .sheet-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+  .sheet-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--border-light);
+    border: none;
+    color: var(--dark-muted);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sheet-body {
+    padding: 16px 18px 24px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+  }
+
+  .sheet-footer-sticky {
+    padding: 12px 18px calc(12px + var(--safe-bottom));
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  /* ── FORM ELEMENTS IN MOBILE SHEETS ── */
+  .m-form-group {
+    margin-bottom: 14px;
+  }
+  .m-form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark-muted);
+    margin-bottom: 5px;
+  }
+  .m-input, .m-select, .m-textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    background: var(--bg);
+    color: var(--dark);
+    outline: none;
+    transition: border 0.2s, background 0.2s;
+  }
+  .m-input:focus, .m-select:focus, .m-textarea:focus {
+    border-color: var(--primary);
+    background: #fff;
+  }
+  .m-textarea {
+    min-height: 70px;
+    resize: vertical;
+  }
+
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Dynamic Rows for Workers & Materials */
+  .dynamic-section-box {
+    background: #faf7f9;
+    border: 1.5px dashed #ebdbe1;
+    border-radius: var(--radius);
+    padding: 12px;
+    margin-bottom: 14px;
+  }
+  .dyn-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .dyn-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary-deep);
+  }
+  .btn-add-mini {
+    padding: 4px 10px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .dyn-row-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    position: relative;
+  }
+  .dyn-row-card:last-child {
+    margin-bottom: 0;
+  }
+  .btn-del-mini {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: none;
+    border: none;
+    color: var(--danger);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 6px;
+  }
+
+  /* Live Calculation Banner inside Booking Form */
+  .live-calc-box {
+    background: linear-gradient(135deg, #2d1825 0%, #1e1322 100%);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 14px;
+    margin: 14px 0;
+  }
+  .live-calc-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 8px;
+  }
+  .live-calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+  .live-calc-net {
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .live-calc-net span { font-size: 13px; font-weight: 600; }
+  .live-calc-net strong { font-size: 19px; color: #34d399; }
+
+  /* ── BUTTONS ── */
+  .btn-primary-m {
+    width: 100%;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(201,96,122,0.35);
+    transition: opacity 0.2s;
+  }
+  .btn-primary-m:active { opacity: 0.9; }
+
+  .btn-secondary-m {
+    padding: 12px 18px;
+    background: var(--border-light);
+    color: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ── EMPTY STATES ── */
+  .m-empty-state {
+    text-align: center;
+    padding: 45px 20px;
+    color: var(--light-muted);
+  }
+  .m-empty-icon {
+    font-size: 42px;
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+  .m-empty-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark-muted);
+    margin-bottom: 4px;
+  }
+  .m-empty-sub {
+    font-size: 12.5px;
+  }
+
+  /* ── SETTINGS & GOOGLE SYNC UI ── */
+  .setting-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .setting-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .setting-desc {
+    font-size: 12px;
+    color: var(--dark-muted);
+    margin-bottom: 12px;
+  }
+
+  .google-signin-btn {
+    width: 100%;
+    padding: 11px 16px;
+    background: #ffffff;
+    color: #3c4043;
+    border: 1.5px solid #dadce0;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    transition: background 0.2s;
+  }
+  .google-signin-btn:active { background: #f8f9fa; }
+
+  /* ── LOGIN SCREEN OVERLAY ── */
+  #login-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: linear-gradient(135deg, #1b1622 0%, #2f172a 60%, #461b2e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .login-box {
+    background: #ffffff;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 380px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+  }
+  .login-brand-logo {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+    color: #fff;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 12px;
+    box-shadow: 0 6px 16px rgba(201,96,122,0.4);
+  }
+  .login-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 2px;
+  }
+  .login-subtitle {
+    font-size: 12.5px;
+    color: var(--primary);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .login-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0;
+    color: var(--light-muted);
+    font-size: 12px;
+  }
+  .login-divider::before, .login-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── PRINTABLE SLIP / INVOICE VIEW ── */
+  .receipt-slip {
+    background: #fff;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #111;
+  }
+
+  /* ── ADMIN / VIEWER ROLES ── */
+  body.role-viewer .admin-only,
+  body.role-viewer [onclick*="openBookingModal"],
+  body.role-viewer [onclick*="editBookingModal"],
+  body.role-viewer [onclick*="openPaymentUpdater"],
+  body.role-viewer [onclick*="openCustomerModal"],
+  body.role-viewer [onclick*="startBookingForCustomer"],
+  body.role-viewer [onclick*="openWorkerModal"],
+  body.role-viewer [onclick*="openMaterialModal"] { display: none !important; }
+  body.role-viewer [onclick*="toggleWorkerJobPaid"] { pointer-events: none; }
+  body.role-admin .viewer-only { display: none !important; }
+  .role-note { font-size: 12px; line-height: 1.55; color: var(--dark-muted); background: var(--border-light); padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; }
+  .role-note b { color: var(--dark); }
+  .link-btn { background: none; border: none; color: var(--primary); font-weight: 600; font-size: 12px; cursor: pointer; padding: 8px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-brand-logo">✦</div>
+    <h2 class="login-title">Kirat Boutique</h2>
+    <div class="login-subtitle">Boutique & Tailoring Manager</div>
+
+    <!-- Step 1: what kind of phone is this? (asked once) -->
+    <div id="login-choose">
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px;">What will this phone be used for?</div>
+      <button class="btn-primary-m" onclick="chooseRole('admin')" style="margin-bottom:10px;">👑 Admin Phone (full access)</button>
+      <button class="btn-secondary-m" style="width:100%;font-weight:700;" onclick="chooseRole('viewer')">👁 Viewer Phone (view only)</button>
+      <div style="font-size:11px;color:var(--dark-muted);margin-top:12px;line-height:1.5;">
+        Admin can add, edit and delete everything.<br>Viewer can only see all details and gets updates from a data file sent by Admin.
+      </div>
+    </div>
+
+    <!-- Step 2 (Admin only): password -->
+    <div id="login-admin" style="display:none;text-align:left;">
+      <div id="login-err" style="color:var(--danger);font-size:12px;margin-bottom:12px;display:none;"></div>
+      <div class="m-form-group">
+        <label class="m-form-label">Admin Username</label>
+        <input type="text" id="login-user" class="m-input" value="kirat" autocomplete="off">
+      </div>
+      <div class="m-form-group">
+        <label class="m-form-label">Password</label>
+        <input type="password" id="login-pass" class="m-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')doStandardLogin()">
+      </div>
+      <div id="login-hint" style="font-size:11px;color:var(--dark-muted);margin-bottom:10px;display:none;"></div>
+      <button class="btn-primary-m" onclick="doStandardLogin()">Sign In as Admin</button>
+      <div style="text-align:center;margin-top:6px;"><button class="link-btn" onclick="changePhoneType()">← Change phone type</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN MOBILE APPLICATION SHELL ── -->
+<div class="mobile-frame" id="app" style="display:none;">
+
+  <!-- TOP APP HEADER -->
+  <header class="m-header">
+    <div class="brand-area" onclick="showTab('dashboard')">
+      <div class="brand-logo-icon">✦</div>
+      <div class="brand-text">
+        <h1>Kirat Boutique</h1>
+        <span id="header-user-role">Smart Mobile Hub</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="sync-badge" id="sync-status-indicator" onclick="showTab('settings')" title="Phone type / data status">
+        <div class="sync-dot online" id="sync-dot"></div>
+        <span id="sync-text">Admin</span>
+      </div>
+      <div class="user-avatar-btn" onclick="showTab('settings')" id="top-avatar-box">
+        <span id="top-avatar-text">KB</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FLOATING ACTION BUTTON (Quick New Booking) -->
+  <button class="fab-btn" onclick="openBookingModal()" title="New Booking">+</button>
+
+  <!-- ── APP VIEWS CONTAINER ── -->
+  <main class="m-content">
+
+    <!-- 1. DASHBOARD VIEW -->
+    <section id="view-dashboard" class="view-tab active">
+      <div class="hero-greeting">
+        <h2 class="hero-title">Welcome back, <span id="dash-user-name">Kirat</span>! 👋</h2>
+        <p class="hero-sub">Here is your boutique's live summary today.</p>
+        <div class="hero-badges">
+          <div class="hero-chip">📅 <span id="dash-date-today">Today</span></div>
+          <div class="hero-chip">👗 <span id="dash-active-count">0 Active Orders</span></div>
+        </div>
+      </div>
+
+      <!-- Financial & Margin Overview -->
+      <div class="profit-strip">
+        <div class="strip-head">
+          <span class="strip-title">Financial Summary & Profits</span>
+          <span style="font-size:11px;color:var(--primary);font-weight:600;cursor:pointer;" onclick="showTab('payments')">Full Ledger →</span>
+        </div>
+        <div class="strip-details">
+          <div class="strip-col">
+            <p>Total Revenue</p>
+            <h4 class="col-rev" id="dash-total-rev">₹0</h4>
+          </div>
+          <div class="strip-col">
+            <p>Labor + Materials</p>
+            <h4 class="col-exp" id="dash-total-costs">₹0</h4>
+          </div>
+          <div class="strip-col">
+            <p>Net Profit</p>
+            <h4 class="col-profit" id="dash-net-profit">₹0</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick KPI Cards -->
+      <div class="stats-grid-2">
+        <div class="stat-card-m highlight">
+          <div class="stat-m-label">Deliveries Today</div>
+          <div class="stat-m-val" id="dash-today-del">0</div>
+          <div class="stat-m-sub">Urgent / Ready</div>
+        </div>
+        <div class="stat-card-m">
+          <div class="stat-m-label">Customer Dues</div>
+          <div class="stat-m-val" style="color:var(--warn);" id="dash-cust-dues">₹0</div>
+          <div class="stat-m-sub">Uncollected balance</div>
+        </div>
+        <div class="stat-card-m">
+          <div class="stat-m-label">Worker Wages Due</div>
+          <div class="stat-m-val" style="color:var(--danger);" id="dash-worker-dues">₹0</div>
+          <div class="stat-m-sub">To be paid to karigars</div>
+        </div>
+        <div class="stat-card-m">
+          <div class="stat-m-label">In Progress</div>
+          <div class="stat-m-val" style="color:var(--info);" id="dash-in-prog">0</div>
+          <div class="stat-m-sub">On machine/cutting</div>
+        </div>
+      </div>
+
+      <!-- Recent / Today Bookings -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:16px 0 10px;">
+        <h3 style="font-size:15px;font-weight:700;">Upcoming Deliveries</h3>
+        <span style="font-size:12px;color:var(--primary);font-weight:600;cursor:pointer;" onclick="showTab('bookings')">View All</span>
+      </div>
+      <div id="dash-recent-list"></div>
+    </section>
+
+    <!-- 2. BOOKINGS VIEW -->
+    <section id="view-bookings" class="view-tab">
+      <div class="search-wrap">
+        <svg class="icon search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+        <input type="text" id="booking-search" placeholder="Search customer, order ID, or garment…" oninput="filterBookings()">
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="chips-scroll">
+        <button class="filter-chip active" onclick="setBookingFilter('all', this)">All Orders</button>
+        <button class="filter-chip" onclick="setBookingFilter('pending', this)">Pending</button>
+        <button class="filter-chip" onclick="setBookingFilter('in-progress', this)">In Progress</button>
+        <button class="filter-chip" onclick="setBookingFilter('done', this)">Ready / Done</button>
+        <button class="filter-chip" onclick="setBookingFilter('urgent', this)">Due Soon</button>
+        <button class="filter-chip" onclick="setBookingFilter('unpaid', this)">Payment Due</button>
+      </div>
+
+      <div id="bookings-container"></div>
+    </section>
+
+    <!-- 3. CUSTOMERS VIEW -->
+    <section id="view-customers" class="view-tab">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h2 style="font-family:'Playfair Display',serif;font-size:20px;">Customer Directory</h2>
+        <button class="btn-action-pill primary" onclick="openCustomerModal()" style="flex:none;padding:7px 12px;">+ Add Customer</button>
+      </div>
+
+      <div class="search-wrap">
+        <svg class="icon search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+        <input type="text" id="cust-search" placeholder="Search customer name or phone…" oninput="renderCustomers(this.value)">
+      </div>
+
+      <div id="customers-container"></div>
+    </section>
+
+    <!-- 4. WORKERS / KARIGAR VIEW -->
+    <section id="view-workers" class="view-tab">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:20px;">Karigars & Team</h2>
+          <p style="font-size:11.5px;color:var(--dark-muted)">Manage tailor wages, stitching & payouts</p>
+        </div>
+        <button class="btn-action-pill primary" onclick="openWorkerModal()" style="flex:none;padding:7px 12px;">+ Add Karigar</button>
+      </div>
+
+      <div class="search-wrap">
+        <svg class="icon search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+        <input type="text" id="worker-search" placeholder="Search worker name or skill…" oninput="renderWorkers(this.value)">
+      </div>
+
+      <div id="workers-container"></div>
+    </section>
+
+    <!-- 5. PAYMENTS & KHATA HUB -->
+    <section id="view-payments" class="view-tab">
+      <h2 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:12px;">Payments & Accounts</h2>
+
+      <!-- Subtabs for 360 degree boutique management -->
+      <div class="pay-subtabs">
+        <button class="pay-subtab-btn active" onclick="switchPaySubtab('customers', this)">Customer Dues</button>
+        <button class="pay-subtab-btn" onclick="switchPaySubtab('workers', this)">Worker Khata</button>
+        <button class="pay-subtab-btn" onclick="switchPaySubtab('materials', this)">Materials</button>
+        <button class="pay-subtab-btn" onclick="switchPaySubtab('pnl', this)">Profit & Loss</button>
+      </div>
+
+      <!-- Subtab 1: Customer Dues -->
+      <div id="paysub-customers">
+        <div class="stat-card-m" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div class="stat-m-label">Total Customer Dues</div>
+            <div class="stat-m-val" style="color:var(--warn);" id="pay-total-cust-due">₹0</div>
+          </div>
+          <span style="font-size:11px;color:var(--dark-muted)">Pending Collections</span>
+        </div>
+        <div id="customer-dues-list"></div>
+      </div>
+
+      <!-- Subtab 2: Worker Khata (Tailor wages & ledger) -->
+      <div id="paysub-workers" style="display:none;">
+        <div class="stat-card-m" style="margin-bottom:12px;background:var(--primary-light);border-color:#f3d7df;">
+          <div class="stat-m-label" style="color:var(--primary-deep);">Total Wages Unpaid to Workers</div>
+          <div class="stat-m-val" style="color:var(--primary-deep);" id="pay-total-worker-due">₹0</div>
+          <div class="stat-m-sub" style="color:var(--dark-muted)">Auto-calculated from all assigned jobs</div>
+        </div>
+        <div id="workers-khata-list"></div>
+      </div>
+
+      <!-- Subtab 3: Materials Expense -->
+      <div id="paysub-materials" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <h4 style="font-size:14px;">Materials & Supplies Inventory</h4>
+          <button class="btn-add-mini" onclick="openMaterialModal()">+ Add Material</button>
+        </div>
+        <div id="materials-expense-list"></div>
+      </div>
+
+      <!-- Subtab 4: Profit & Loss (P&L) Statement -->
+      <div id="paysub-pnl" style="display:none;">
+        <div id="pnl-summary-box"></div>
+      </div>
+    </section>
+
+    <!-- 6. SETTINGS & DATA SYNC VIEW -->
+    <section id="view-settings" class="view-tab">
+      <h2 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:14px;">Settings</h2>
+
+      <!-- Data status -->
+      <div class="setting-card">
+        <div class="setting-title">📱 This Phone</div>
+        <div id="data-status"></div>
+      </div>
+
+      <!-- ADMIN: send data to the viewer phone -->
+      <div class="setting-card admin-only">
+        <div class="setting-title">📤 Send Data to Viewer Phone</div>
+        <div class="role-note">
+          <b>How to update the 2nd phone:</b><br>
+          1. Tap <b>Share Data File</b> and choose WhatsApp (or save it, then attach the .json file in WhatsApp).<br>
+          2. On the Viewer phone, download the file and tap <b>Sync</b> in Settings.
+        </div>
+        <div style="display:flex;gap:8px;flex-direction:column;">
+          <button class="btn-primary-m" onclick="shareDataFile()">📲 Share Data File (.json)</button>
+          <button class="btn-secondary-m" onclick="exportDataJSON()">📥 Save Backup to Phone Storage</button>
+          <button class="btn-secondary-m" onclick="document.getElementById('import-file-input').click()">📂 Restore from Backup File</button>
+        </div>
+      </div>
+
+      <!-- VIEWER: sync from admin -->
+      <div class="setting-card viewer-only">
+        <div class="setting-title">🔄 Sync from Admin Phone</div>
+        <div class="role-note">
+          <b>To get the latest data:</b><br>
+          1. Admin sends you the .json file on WhatsApp.<br>
+          2. Download it to your phone.<br>
+          3. Tap <b>Sync Now</b> below and select that file.
+        </div>
+        <button class="btn-primary-m" onclick="document.getElementById('import-file-input').click()">🔄 Sync Now (choose .json file)</button>
+      </div>
+      <input type="file" id="import-file-input" style="display:none;" accept=".json,application/json,text/plain" onchange="importDataJSON(event)">
+
+      <!-- Boutique Profile & Admin Password -->
+      <div class="setting-card admin-only">
+        <div class="setting-title">👤 Boutique Profile & Login</div>
+        <div class="m-form-group">
+          <label class="m-form-label">Boutique Name</label>
+          <input type="text" id="cfg-bname" class="m-input" value="Kirat Boutique">
+        </div>
+        <div class="m-form-group">
+          <label class="m-form-label">Owner Name</label>
+          <input type="text" id="cfg-owner" class="m-input" value="Kirat">
+        </div>
+        <div class="m-form-group">
+          <label class="m-form-label">Contact Phone</label>
+          <input type="tel" id="cfg-phone" class="m-input" placeholder="+91 98765 43210">
+        </div>
+        <div class="form-grid-2">
+          <div class="m-form-group">
+            <label class="m-form-label">Username</label>
+            <input type="text" id="cfg-user" class="m-input" value="kirat">
+          </div>
+          <div class="m-form-group">
+            <label class="m-form-label">Change Password</label>
+            <input type="password" id="cfg-pass" class="m-input" placeholder="New password">
+          </div>
+        </div>
+        <div id="cfg-save-msg" style="font-size:12px;margin-bottom:8px;"></div>
+        <button class="btn-primary-m" onclick="saveBoutiqueSettings()">Save Profile & Credentials</button>
+        <button class="btn-secondary-m" style="width:100%;margin-top:10px;color:var(--danger);border-color:#fbd5d5;" onclick="doLogout()">Lock / Sign Out</button>
+      </div>
+
+      <div class="setting-card viewer-only">
+        <div class="setting-title">👑 Make this an Admin phone</div>
+        <p class="setting-desc">Only for the owner. Needs the Admin password.</p>
+        <button class="btn-secondary-m" style="width:100%;" onclick="switchToAdmin()">Switch to Admin</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── BOTTOM NAVIGATION DOCK (Mobile App Standard) ── -->
+  <nav class="bottom-nav">
+    <div class="nav-inner">
+      <button class="nav-item active" id="nav-dashboard" onclick="showTab('dashboard')">
+        <svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+
+      <button class="nav-item" id="nav-bookings" onclick="showTab('bookings')">
+        <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Orders</span>
+        <span class="nav-badge-pill" id="badge-orders-count" style="display:none;">0</span>
+      </button>
+
+      <button class="nav-item" id="nav-customers" onclick="showTab('customers')">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Clients</span>
+      </button>
+
+      <button class="nav-item" id="nav-workers" onclick="showTab('workers')">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="m19 11 3 3-3 3"/><path d="m5 11-3 3 3 3"/></svg>
+        <span>Karigars</span>
+      </button>
+
+      <button class="nav-item" id="nav-payments" onclick="showTab('payments')">
+        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <span>Khata</span>
+      </button>
+
+      <button class="nav-item" id="nav-settings" onclick="showTab('settings')">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>More</span>
+      </button>
+    </div>
+  </nav>
+
+</div>
+
+<!-- ── MOBILE BOTTOM SHEET MODAL (SLIDE-UP) ── -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="closeSheetOutside(event)">
+  <div class="sheet-modal" id="sheet-modal">
+    <div class="sheet-drag-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title" id="sheet-title">Booking Details</div>
+      <button class="sheet-close-btn" onclick="closeSheet()">✕</button>
+    </div>
+    <div class="sheet-body" id="sheet-body">
+      <!-- Dynamic Form / Content Injected Here -->
+    </div>
+    <div class="sheet-footer-sticky" id="sheet-footer">
+      <!-- Action buttons injected here -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STORE & DATA REPOSITORY ──
+let DEVICE_ROLE = null;            // 'admin' | 'viewer' | null (not chosen yet)
+try { DEVICE_ROLE = localStorage.getItem('kirat_meta_role') || null; } catch (e) {}
+
+const META = {                     // small device info (role, last backup, last sync)
+  get: k => { try { return localStorage.getItem('kirat_meta_' + k); } catch (e) { return null; } },
+  set: (k, v) => { try { localStorage.setItem('kirat_meta_' + k, v); } catch (e) {} }
+};
+
+const S = {
+  allowWrite: false,               // only true while a Viewer is syncing from a file
+  get: k => { try { return JSON.parse(localStorage.getItem('kirat_'+k)) } catch { return null } },
+  set: (k,v) => {
+    if (DEVICE_ROLE !== 'admin' && !S.allowWrite) return;   // Viewer phone can never change data
+    localStorage.setItem('kirat_'+k, JSON.stringify(v));
+    if (DEVICE_ROLE === 'admin' && !S.allowWrite) { META.set('dirty', '1'); if (typeof refreshRoleBadge === 'function') refreshRoleBadge(); }
+  },
+};
+const isAdmin = () => DEVICE_ROLE === 'admin';
+function guardAdmin() {
+  if (isAdmin()) return true;
+  alert('View-only phone: changes can only be made on the Admin phone.');
+  return false;
+}
+
+// ── INITIAL DATA BOOTSTRAP ──
+function seedDefaults() {
+  if (!S.get('creds')) S.set('creds', { username: 'kirat', password: 'boutique123', name: 'Kirat', phone: '+91 9876543210', boutiqueName: 'Kirat Boutique' });
+  if (!S.get('customers')) S.set('customers', [
+    { id: 'c1', name: 'Simran Kaur', phone: '9876541122', address: 'Model Town', notes: 'Prefers boat neck, 2.5 inch margin' },
+    { id: 'c2', name: 'Harpreet Sharma', phone: '9812345678', address: 'Civil Lines', notes: 'Heavy embroidery enthusiast' },
+    { id: 'c3', name: 'Pooja Verma', phone: '9822334455', address: 'Mall Road', notes: 'Standard fit' }
+  ]);
+  if (!S.get('workers')) S.set('workers', [
+    { id: 'w1', name: 'Ramesh Master', phone: '9800112233', skill: 'Master Cutter & Tailor', notes: 'Best for designer blouses' },
+    { id: 'w2', name: 'Mohammad Ali', phone: '9844556677', skill: 'Hand Embroidery & Aari/Zari', notes: 'Specialist in heavy work' },
+    { id: 'w3', name: 'Sita Ram', phone: '9877889900', skill: 'Finishing & Pico/Fall', notes: 'Fast delivery' }
+  ]);
+  if (!S.get('materials')) S.set('materials', [
+    { id: 'm1', name: 'Cotton Lining (Astar)', type: 'Fabric', stock: '25 meters', defaultCost: 60 },
+    { id: 'm2', name: 'Designer Golden Lace', type: 'Trim', stock: '15 meters', defaultCost: 120 },
+    { id: 'm3', name: 'Concealed Zipper (YKK)', type: 'Accessory', stock: '40 pcs', defaultCost: 35 },
+    { id: 'm4', name: 'Latkan Pair (Handmade)', type: 'Accessory', stock: '12 sets', defaultCost: 150 }
+  ]);
+  if (!S.get('bookings')) {
+    // Initial sample booking to showcase full worker & material cost breakdown
+    S.set('bookings', [
+      {
+        id: 'B0001',
+        customerName: 'Simran Kaur',
+        customerPhone: '9876541122',
+        garmentType: 'Designer Bridal Blouse',
+        orderDate: new Date(Date.now() - 86400000*2).toISOString().slice(0,10),
+        deliveryDate: new Date(Date.now() + 86400000*3).toISOString().slice(0,10),
+        status: 'in-progress',
+        notes: 'Deep back with dori and handmade latkans. Extra 2 inches inner margin.',
+        // Workers breakdown with wage amounts
+        workerDetails: [
+          { workerName: 'Ramesh Master', role: 'Cutting & Stitching', amount: 450, status: 'unpaid' },
+          { workerName: 'Mohammad Ali', role: 'Zari Hand Embroidery', amount: 350, status: 'paid' }
+        ],
+        // Materials breakdown with costs
+        materialDetails: [
+          { name: 'Cotton Lining (Astar)', qty: '1 meter', cost: 70, status: 'paid' },
+          { name: 'Designer Golden Lace', qty: '2 meters', cost: 140, status: 'paid' },
+          { name: 'Latkan Pair (Handmade)', qty: '1 pair', cost: 150, status: 'unpaid' }
+        ],
+        totalAmount: 2200,
+        paidAmount: 1000,
+        payMode: 'GPay/UPI'
+      }
+    ]);
+  }
+  if (!S.get('counter')) S.set('counter', 2);
+}
+
+function nextBookingId() {
+  const c = S.get('counter') || 1;
+  S.set('counter', c+1);
+  return 'B' + String(c).padStart(4, '0');
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+// ── PHONE TYPE (ADMIN / VIEWER) & LOGIN ──
+function initApp() {
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+  if (isAdmin()) seedDefaults();
+  showLoginScreen();
+}
+
+function showLoginScreen() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  if (DEVICE_ROLE === 'viewer') { enterViewer(); return; }
+  const admin = DEVICE_ROLE === 'admin';
+  document.getElementById('login-choose').style.display = admin ? 'none' : 'block';
+  document.getElementById('login-admin').style.display = admin ? 'block' : 'none';
+  showLoginHint();
+}
+
+function showLoginHint() {
+  const creds = S.get('creds') || {};
+  const h = document.getElementById('login-hint');
+  if (!creds.password || creds.password === 'boutique123') {
+    h.textContent = 'Default login: kirat / boutique123 — please change it in Settings after signing in.';
+    h.style.display = 'block';
+  } else h.style.display = 'none';
+}
+
+function chooseRole(r) {
+  if (r === 'admin') {
+    document.getElementById('login-choose').style.display = 'none';
+    document.getElementById('login-admin').style.display = 'block';
+    showLoginHint();
+  } else {
+    if (!confirm('Use this phone as a VIEWER phone?\n\nIt will only show data. To update it, sync a .json file sent by the Admin phone.')) return;
+    DEVICE_ROLE = 'viewer'; META.set('role', 'viewer');
+    enterViewer();
+  }
+}
+
+function changePhoneType() {
+  if (DEVICE_ROLE && !confirm('Change phone type? You will be asked to choose Admin or Viewer again.')) return;
+  DEVICE_ROLE = null; META.set('role', '');
+  showLoginScreen();
+}
+
+function enterViewer() {
+  const creds = S.get('creds') || {};
+  completeLogin(creds.name || 'Boutique');
+}
+
+function switchToAdmin() {
+  const creds = S.get('creds') || {};
+  const pw = prompt('Enter the Admin password to make this an Admin phone:');
+  if (pw === null) return;
+  if (pw !== (creds.password || 'boutique123')) { alert('Wrong password.'); return; }
+  DEVICE_ROLE = 'admin'; META.set('role', 'admin');
+  seedDefaults();
+  completeLogin(creds.name || 'Kirat');
+}
+
+function doStandardLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const creds = S.get('creds') || {};
+  const err = document.getElementById('login-err');
+
+  if (u.toLowerCase() === (creds.username || 'kirat').toLowerCase() && p === (creds.password || 'boutique123')) {
+    err.style.display = 'none';
+    DEVICE_ROLE = 'admin'; META.set('role', 'admin');
+    seedDefaults();
+    document.getElementById('login-pass').value = '';
+    completeLogin(creds.name || 'Kirat');
+  } else {
+    err.textContent = 'Invalid username or password.';
+    err.style.display = 'block';
+  }
+}
+
+function applyRoleUI() {
+  document.body.classList.toggle('role-admin', isAdmin());
+  document.body.classList.toggle('role-viewer', !isAdmin());
+  const hdr = document.getElementById('header-user-role');
+  if (hdr) hdr.textContent = isAdmin() ? 'Admin · Full Access' : 'Viewer · View Only';
+  refreshRoleBadge();
+}
+
+function refreshRoleBadge() {
+  const dot = document.getElementById('sync-dot'), txt = document.getElementById('sync-text');
+  if (!dot || !txt) return;
+  dot.className = 'sync-dot';
+  if (isAdmin()) {
+    const due = META.get('dirty') === '1';
+    txt.textContent = due ? 'Admin · Backup due' : 'Admin';
+    dot.style.background = due ? '#f59e0b' : '#10b981';
+  } else {
+    txt.textContent = 'View Only';
+    dot.style.background = '#6b7280';
+  }
+}
+
+function completeLogin(userName, userEmail=null, photoUrl=null) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  applyRoleUI();
+
+  document.getElementById('dash-user-name').textContent = userName;
+  const initials = userName.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('top-avatar-text').textContent = initials;
+
+  const todayStr = new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+  document.getElementById('dash-date-today').textContent = todayStr;
+
+  loadSettingsForm();
+  showTab('dashboard');
+}
+
+function doLogout() {
+  document.getElementById('app').style.display = 'none';
+  showLoginScreen();
+}
+
+// ── NAVIGATION & TABS ──
+let currentTab = 'dashboard';
+function showTab(tabName) {
+  currentTab = tabName;
+  document.querySelectorAll('.view-tab').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+  const viewEl = document.getElementById('view-' + tabName);
+  const navEl = document.getElementById('nav-' + tabName);
+  if (viewEl) viewEl.classList.add('active');
+  if (navEl) navEl.classList.add('active');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (tabName === 'dashboard') renderDashboard();
+  if (tabName === 'bookings') filterBookings();
+  if (tabName === 'customers') renderCustomers();
+  if (tabName === 'workers') renderWorkers();
+  if (tabName === 'payments') renderPaymentsHub();
+  if (tabName === 'settings') loadSettingsForm();
+}
+
+// ── DASHBOARD CALCULATIONS ──
+function renderDashboard() {
+  const bookings = S.get('bookings') || [];
+  const todayIso = new Date().toISOString().slice(0, 10);
+
+  const activeOrders = bookings.filter(b => b.status !== 'done' && b.status !== 'cancelled');
+  document.getElementById('dash-active-count').textContent = `${activeOrders.length} Active Orders`;
+  const badgeOrders = document.getElementById('badge-orders-count');
+  if (activeOrders.length > 0) {
+    badgeOrders.style.display = 'inline-block';
+    badgeOrders.textContent = activeOrders.length;
+  } else {
+    badgeOrders.style.display = 'none';
+  }
+
+  // Financial aggregates
+  let totalRevenue = 0;
+  let totalCustomerCollected = 0;
+  let totalWorkerWages = 0;
+  let totalWorkerPaid = 0;
+  let totalMaterialCost = 0;
+
+  bookings.forEach(b => {
+    totalRevenue += (parseFloat(b.totalAmount) || 0);
+    totalCustomerCollected += (parseFloat(b.paidAmount) || 0);
+
+    // Normalize worker details
+    const workers = getNormalizedWorkers(b);
+    workers.forEach(w => {
+      const amt = parseFloat(w.amount) || 0;
+      totalWorkerWages += amt;
+      if (w.status === 'paid') totalWorkerPaid += amt;
+    });
+
+    // Normalize materials
+    const materials = getNormalizedMaterials(b);
+    materials.forEach(m => {
+      totalMaterialCost += (parseFloat(m.cost) || 0);
+    });
+  });
+
+  const totalCosts = totalWorkerWages + totalMaterialCost;
+  const netProfit = totalRevenue - totalCosts;
+  const customerDues = totalRevenue - totalCustomerCollected;
+  const workerDues = totalWorkerWages - totalWorkerPaid;
+
+  document.getElementById('dash-total-rev').textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
+  document.getElementById('dash-total-costs').textContent = `₹${totalCosts.toLocaleString('en-IN')}`;
+  document.getElementById('dash-net-profit').textContent = `₹${netProfit.toLocaleString('en-IN')}`;
+
+  const todayDeliveries = bookings.filter(b => b.deliveryDate === todayIso && b.status !== 'done').length;
+  document.getElementById('dash-today-del').textContent = todayDeliveries;
+  document.getElementById('dash-cust-dues').textContent = `₹${customerDues.toLocaleString('en-IN')}`;
+  document.getElementById('dash-worker-dues').textContent = `₹${workerDues.toLocaleString('en-IN')}`;
+  document.getElementById('dash-in-prog').textContent = bookings.filter(b => b.status === 'in-progress').length;
+
+  // Upcoming / Recent cards
+  const container = document.getElementById('dash-recent-list');
+  const recent = [...bookings].reverse().slice(0, 5);
+  if (recent.length === 0) {
+    container.innerHTML = `
+      <div class="m-empty-state">
+        <div class="m-empty-icon">👗</div>
+        <div class="m-empty-title">No orders yet</div>
+        <div class="m-empty-sub">Tap the "+" button below to book your first garment!</div>
+      </div>
+    `;
+    return;
+  }
+  container.innerHTML = recent.map(b => createOrderCardHTML(b)).join('');
+}
+
+// ── BOOKINGS LIST & FILTERS ──
+let activeBookingFilter = 'all';
+
+function setBookingFilter(filter, btn) {
+  activeBookingFilter = filter;
+  document.querySelectorAll('.chips-scroll .filter-chip').forEach(c => c.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  filterBookings();
+}
+
+function filterBookings() {
+  const query = (document.getElementById('booking-search') ? document.getElementById('booking-search').value : '').toLowerCase().trim();
+  const bookings = S.get('bookings') || [];
+  const todayIso = new Date().toISOString().slice(0, 10);
+
+  const filtered = bookings.filter(b => {
+    // Search match
+    const matchQ = !query ||
+      (b.customerName || '').toLowerCase().includes(query) ||
+      (b.id || '').toLowerCase().includes(query) ||
+      (b.garmentType || '').toLowerCase().includes(query) ||
+      (b.customerPhone || '').includes(query);
+
+    if (!matchQ) return false;
+
+    // Filter chip match
+    if (activeBookingFilter === 'all') return true;
+    if (activeBookingFilter === 'pending') return b.status === 'pending';
+    if (activeBookingFilter === 'in-progress') return b.status === 'in-progress';
+    if (activeBookingFilter === 'done') return b.status === 'done';
+    if (activeBookingFilter === 'urgent') {
+      return b.status !== 'done' && b.deliveryDate && b.deliveryDate <= todayIso;
+    }
+    if (activeBookingFilter === 'unpaid') {
+      return (parseFloat(b.totalAmount) || 0) > (parseFloat(b.paidAmount) || 0);
+    }
+    return true;
+  });
+
+  const container = document.getElementById('bookings-container');
+  if (!container) return;
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="m-empty-state">
+        <div class="m-empty-icon">📋</div>
+        <div class="m-empty-title">No matching orders</div>
+        <div class="m-empty-sub">Try changing your search or filter criteria.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = [...filtered].reverse().map(b => createOrderCardHTML(b)).join('');
+}
+
+// ── NORMALIZE HELPERS (Backwards compatibility) ──
+function getNormalizedWorkers(b) {
+  if (Array.isArray(b.workerDetails)) return b.workerDetails;
+  if (Array.isArray(b.workers)) {
+    return b.workers.map(w => ({
+      workerName: typeof w === 'string' ? w : (w.name || 'Worker'),
+      role: w.role || 'Stitching',
+      amount: parseFloat(w.amount) || 0,
+      status: w.status || 'unpaid'
+    }));
+  }
+  return [];
+}
+
+function getNormalizedMaterials(b) {
+  if (Array.isArray(b.materialDetails)) return b.materialDetails;
+  if (Array.isArray(b.materials)) {
+    return b.materials.map(m => ({
+      name: typeof m === 'string' ? m : (m.name || 'Material'),
+      qty: m.qty || '1',
+      cost: parseFloat(m.cost) || 0,
+      status: m.status || 'paid'
+    }));
+  }
+  return [];
+}
+
+// ── MOBILE ORDER CARD TEMPLATE ──
+function createOrderCardHTML(b) {
+  const workers = getNormalizedWorkers(b);
+  const materials = getNormalizedMaterials(b);
+
+  const totalCustomer = parseFloat(b.totalAmount) || 0;
+  const paidCustomer = parseFloat(b.paidAmount) || 0;
+  const balanceCustomer = totalCustomer - paidCustomer;
+
+  const totalWorkersWage = workers.reduce((sum, w) => sum + (parseFloat(w.amount) || 0), 0);
+  const totalMaterialsCost = materials.reduce((sum, m) => sum + (parseFloat(m.cost) || 0), 0);
+  const totalCost = totalWorkersWage + totalMaterialsCost;
+  const orderNetProfit = totalCustomer - totalCost;
+
+  const statusBadgeClass = {
+    'pending': 'badge-pending',
+    'in-progress': 'badge-in-progress',
+    'done': 'badge-done',
+    'cancelled': 'badge-cancelled'
+  }[b.status] || 'badge-pending';
+
+  const payBadgeClass = balanceCustomer <= 0 && totalCustomer > 0 ? 'badge-paid' :
+                        paidCustomer > 0 ? 'badge-partial' : 'badge-unpaid';
+  const payLabel = balanceCustomer <= 0 && totalCustomer > 0 ? 'Fully Paid' :
+                   paidCustomer > 0 ? `Paid ₹${paidCustomer}` : 'Unpaid';
+
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const isUrgent = b.deliveryDate && b.deliveryDate <= todayIso && b.status !== 'done';
+
+  const workersPreview = workers.map(w =>
+    `<span class="worker-tag-pill">🧵 ${w.workerName} (${w.role || 'Work'}: ₹${w.amount||0})</span>`
+  ).join('');
+
+  return `
+    <div class="order-card">
+      <div class="order-header">
+        <div class="order-id-cust">
+          <span class="order-id-tag">${b.id}</span>
+          <div class="order-cust-name">${b.customerName || 'Walk-in Client'}</div>
+          <div class="order-work-title">👗 ${b.garmentType || 'Garment Stitching'}</div>
+        </div>
+        <div class="badges-cluster">
+          <span class="m-badge ${statusBadgeClass}">${b.status || 'pending'}</span>
+          <span class="m-badge ${payBadgeClass}">${payLabel}</span>
+        </div>
+      </div>
+
+      <div class="order-dates-row">
+        <div class="date-item">
+          <span>Booked:</span>
+          <strong>${formatDateSimple(b.orderDate)}</strong>
+        </div>
+        <div class="date-item ${isUrgent ? 'due-urgent' : ''}">
+          <span>Delivery:</span>
+          <strong>${formatDateSimple(b.deliveryDate)} ${isUrgent ? '⚠️ Due' : ''}</strong>
+        </div>
+      </div>
+
+      <!-- Financial Breakdown for Kirat Boutique -->
+      <div class="fin-summary-box">
+        <div class="fin-line">
+          <span style="color:var(--dark-muted)">Customer Bill:</span>
+          <strong>₹${totalCustomer.toLocaleString('en-IN')} <span style="font-size:10.5px;color:${balanceCustomer > 0 ? 'var(--warn)' : 'var(--success)'}">(${balanceCustomer > 0 ? 'Due: ₹' + balanceCustomer : 'Cleared'})</span></strong>
+        </div>
+        <div class="fin-line">
+          <span style="color:var(--dark-muted)">Karigar Labor:</span>
+          <span>₹${totalWorkersWage.toLocaleString('en-IN')}</span>
+        </div>
+        <div class="fin-line">
+          <span style="color:var(--dark-muted)">Materials Cost:</span>
+          <span>₹${totalMaterialsCost.toLocaleString('en-IN')}</span>
+        </div>
+        <div class="fin-line last">
+          <span style="color:var(--primary-deep)">Boutique Margin:</span>
+          <strong style="color:${orderNetProfit >= 0 ? 'var(--success)' : 'var(--danger)'}">₹${orderNetProfit.toLocaleString('en-IN')}</strong>
+        </div>
+      </div>
+
+      ${workersPreview ? `<div class="fin-workers-preview">${workersPreview}</div>` : ''}
+
+      <!-- Mobile Quick Action Buttons -->
+      <div class="card-action-bar">
+        <button class="btn-action-pill primary" onclick="editBookingModal('${b.id}')">
+          ✏️ Edit & Costs
+        </button>
+        <button class="btn-action-pill" onclick="openPaymentUpdater('${b.id}')">
+          💳 Collect ₹
+        </button>
+        <button class="btn-action-pill" onclick="viewBookingDetails('${b.id}')">🔍 Details</button>
+      </div>
+    </div>
+  `;
+}
+
+// ── BOOKING MODAL (WITH LIVE WORKER & MATERIAL WAGE CALCULATOR) ──
+function openBookingModal(existingId = null) {
+  if (!guardAdmin()) return;
+  const customers = S.get('customers') || [];
+  const workers = S.get('workers') || [];
+  const materials = S.get('materials') || [];
+  const bookings = S.get('bookings') || [];
+
+  const b = existingId ? bookings.find(x => x.id === existingId) : null;
+  const isNew = !b;
+
+  const currentWorkers = b ? getNormalizedWorkers(b) : [
+    { workerName: (workers[0] ? workers[0].name : ''), role: 'Stitching', amount: 0, status: 'unpaid' }
+  ];
+  const currentMaterials = b ? getNormalizedMaterials(b) : [];
+
+  document.getElementById('sheet-title').textContent = isNew ? '✦ New Garment Booking' : `Edit Booking #${b.id}`;
+
+  // Customer dropdown
+  const custOptions = customers.map(c =>
+    `<option value="${c.name}" data-phone="${c.phone||''}" ${b && b.customerName === c.name ? 'selected' : ''}>${c.name} (${c.phone || 'No phone'})</option>`
+  ).join('');
+
+  document.getElementById('sheet-body').innerHTML = `
+    <!-- Customer Selection -->
+    <div class="m-form-group">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+        <label class="m-form-label" style="margin:0;">Select Customer</label>
+        <span style="font-size:11.5px;color:var(--primary);font-weight:700;cursor:pointer;" onclick="openCustomerModal(null, true)">+ New Client</span>
+      </div>
+      <select id="b-cust-select" class="m-select" onchange="onBookingCustChange()">
+        ${custOptions || '<option value="">No customers found. Click + New Client</option>'}
+      </select>
+      <input type="hidden" id="b-cust-phone" value="${b ? (b.customerPhone||'') : (customers[0]?customers[0].phone:'')}">
+    </div>
+
+    <!-- Garment & Dates -->
+    <div class="m-form-group">
+      <label class="m-form-label">Garment / Work Type</label>
+      <input type="text" id="b-garment" class="m-input" placeholder="e.g. Designer Bridal Blouse, Punjabi Suit, Lehenga" value="${b ? b.garmentType : ''}">
+    </div>
+
+    <div class="form-grid-2">
+      <div class="m-form-group">
+        <label class="m-form-label">Order Date</label>
+        <input type="date" id="b-order-date" class="m-input" value="${b ? b.orderDate : new Date().toISOString().slice(0,10)}">
+      </div>
+      <div class="m-form-group">
+        <label class="m-form-label">Delivery Date</label>
+        <input type="date" id="b-delivery-date" class="m-input" value="${b ? b.deliveryDate : ''}">
+      </div>
+    </div>
+
+    <div class="m-form-group">
+      <label class="m-form-label">Production Status</label>
+      <select id="b-status" class="m-select">
+        <option value="pending" ${!b || b.status==='pending' ? 'selected' : ''}>Pending (Awaiting Work)</option>
+        <option value="in-progress" ${b && b.status==='in-progress' ? 'selected' : ''}>In Progress (Cutting/Sewing)</option>
+        <option value="done" ${b && b.status==='done' ? 'selected' : ''}>Ready for Delivery (Done)</option>
+        <option value="cancelled" ${b && b.status==='cancelled' ? 'selected' : ''}>Cancelled</option>
+      </select>
+    </div>
+
+    <!-- ── DYNAMIC WORKER / KARIGAR ROWS (Amounts & Wage Status) ── -->
+    <div class="dynamic-section-box">
+      <div class="dyn-head">
+        <div>
+          <span class="dyn-title">🧵 Karigars / Workers Labor</span>
+          <p style="font-size:10.5px;color:var(--dark-muted)">Set individual labor cost so Kirat Boutique tracks wages</p>
+        </div>
+        <button type="button" class="btn-add-mini" onclick="addWorkerRow()">+ Add Worker</button>
+      </div>
+      <div id="booking-workers-rows"></div>
+    </div>
+
+    <!-- ── DYNAMIC MATERIAL ROWS (Costs & Quantities) ── -->
+    <div class="dynamic-section-box">
+      <div class="dyn-head">
+        <div>
+          <span class="dyn-title">🪡 Materials & Fabrics Used</span>
+          <p style="font-size:10.5px;color:var(--dark-muted)">Track lining, lace, zippers, threads & supplies</p>
+        </div>
+        <button type="button" class="btn-add-mini" onclick="addMaterialRow()">+ Add Material</button>
+      </div>
+      <div id="booking-materials-rows"></div>
+    </div>
+
+    <!-- Customer Pricing -->
+    <div class="form-grid-2">
+      <div class="m-form-group">
+        <label class="m-form-label">Customer Total Price (₹)</label>
+        <input type="number" id="b-total-amt" class="m-input" placeholder="e.g. 2500" value="${b ? b.totalAmount : ''}" oninput="recalcBookingLive()">
+      </div>
+      <div class="m-form-group">
+        <label class="m-form-label">Advance / Paid (₹)</label>
+        <input type="number" id="b-paid-amt" class="m-input" placeholder="e.g. 1000" value="${b ? b.paidAmount : ''}" oninput="recalcBookingLive()">
+      </div>
+    </div>
+
+    <!-- ── LIVE PROFIT & DUES CALCULATION BANNER ── -->
+    <div class="live-calc-box">
+      <div class="live-calc-title">✦ Live Boutique Accounting</div>
+      <div class="live-calc-grid">
+        <div>Customer Due: <strong id="calc-cust-due">₹0</strong></div>
+        <div>Total Worker Wages: <strong id="calc-worker-cost">₹0</strong></div>
+        <div>Total Materials Cost: <strong id="calc-mat-cost">₹0</strong></div>
+        <div>Total Production Cost: <strong id="calc-total-exp">₹0</strong></div>
+      </div>
+      <div class="live-calc-net">
+        <span>Estimated Kirat Boutique Profit:</span>
+        <strong id="calc-net-profit">₹0</strong>
+      </div>
+    </div>
+
+    <div class="m-form-group">
+      <label class="m-form-label">Measurements & Special Instructions</label>
+      <textarea id="b-notes" class="m-textarea" placeholder="Length, Chest, Waist, Neck depth, Latkan placement, Stitching notes…">${b ? b.notes : ''}</textarea>
+    </div>
+  `;
+
+  // Action Buttons in Sticky Footer
+  document.getElementById('sheet-footer').innerHTML = `
+    <button class="btn-secondary-m" style="flex:1;" onclick="closeSheet()">Cancel</button>
+    ${!isNew ? `<button class="btn-secondary-m" style="color:var(--danger);border-color:#fecaca;" onclick="deleteBookingEntry('${b.id}')">Delete</button>` : ''}
+    <button class="btn-primary-m" style="flex:2;" onclick="saveBookingEntry('${existingId || ''}')">Save Booking</button>
+  `;
+
+  // Populate dynamic rows
+  renderDynamicWorkerRows(currentWorkers);
+  renderDynamicMaterialRows(currentMaterials);
+  recalcBookingLive();
+
+  openSheet();
+}
+
+function editBookingModal(id) {
+  openBookingModal(id);
+}
+
+function onBookingCustChange() {
+  const sel = document.getElementById('b-cust-select');
+  const opt = sel.options[sel.selectedIndex];
+  if (opt) {
+    document.getElementById('b-cust-phone').value = opt.getAttribute('data-phone') || '';
+  }
+}
+
+// ── DYNAMIC WORKER ROWS MANAGEMENT ──
+function renderDynamicWorkerRows(workerList) {
+  const container = document.getElementById('booking-workers-rows');
+  container.innerHTML = '';
+  workerList.forEach((w, idx) => {
+    container.appendChild(createWorkerRowElement(w, idx));
+  });
+}
+
+function createWorkerRowElement(w = {}, index = 0) {
+  const workers = S.get('workers') || [];
+  const div = document.createElement('div');
+  div.className = 'dyn-row-card';
+
+  const wOptions = workers.map(item =>
+    `<option value="${item.name}" ${w.workerName === item.name ? 'selected' : ''}>${item.name} (${item.skill || 'Tailor'})</option>`
+  ).join('');
+
+  div.innerHTML = `
+    <button type="button" class="btn-del-mini" onclick="this.closest('.dyn-row-card').remove(); recalcBookingLive();" title="Remove">✕</button>
+    <div style="font-size:11px;font-weight:700;color:var(--primary);margin-bottom:6px;">Karigar #${index + 1}</div>
+    <div class="m-form-group" style="margin-bottom:8px;">
+      <select class="m-select b-worker-name" style="padding:8px 10px;font-size:13px;" onchange="recalcBookingLive()">
+        <option value="">-- Select Worker --</option>
+        ${wOptions}
+      </select>
+    </div>
+    <div class="form-grid-2">
+      <div>
+        <label style="font-size:10.5px;color:var(--dark-muted);display:block;margin-bottom:3px;">Task Assigned</label>
+        <input type="text" class="m-input b-worker-role" placeholder="e.g. Stitching / Zari" value="${w.role || 'Stitching'}" style="padding:7px 10px;font-size:12.5px;">
+      </div>
+      <div>
+        <label style="font-size:10.5px;color:var(--dark-muted);display:block;margin-bottom:3px;">Labor Wage (₹)</label>
+        <input type="number" class="m-input b-worker-amt" placeholder="0" value="${w.amount || ''}" style="padding:7px 10px;font-size:12.5px;" oninput="recalcBookingLive()">
+      </div>
+    </div>
+    <div style="margin-top:6px;display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:11px;color:var(--dark-muted);">Wage Status:</span>
+      <select class="m-select b-worker-status" style="width:auto;padding:3px 8px;font-size:11.5px;">
+        <option value="unpaid" ${w.status !== 'paid' ? 'selected' : ''}>Unpaid (Due)</option>
+        <option value="paid" ${w.status === 'paid' ? 'selected' : ''}>Paid to Karigar</option>
+      </select>
+    </div>
+  `;
+  return div;
+}
+
+function addWorkerRow() {
+  const container = document.getElementById('booking-workers-rows');
+  const count = container.querySelectorAll('.dyn-row-card').length;
+  container.appendChild(createWorkerRowElement({}, count));
+  recalcBookingLive();
+}
+
+// ── DYNAMIC MATERIAL ROWS MANAGEMENT ──
+function renderDynamicMaterialRows(materialList) {
+  const container = document.getElementById('booking-materials-rows');
+  container.innerHTML = '';
+  materialList.forEach((m, idx) => {
+    container.appendChild(createMaterialRowElement(m, idx));
+  });
+}
+
+function createMaterialRowElement(m = {}, index = 0) {
+  const stockMaterials = S.get('materials') || [];
+  const div = document.createElement('div');
+  div.className = 'dyn-row-card';
+
+  const mOptions = stockMaterials.map(item =>
+    `<option value="${item.name}" data-cost="${item.defaultCost || 0}" ${m.name === item.name ? 'selected' : ''}>${item.name}</option>`
+  ).join('');
+
+  div.innerHTML = `
+    <button type="button" class="btn-del-mini" onclick="this.closest('.dyn-row-card').remove(); recalcBookingLive();" title="Remove">✕</button>
+    <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:6px;">Material #${index + 1}</div>
+    <div class="m-form-group" style="margin-bottom:8px;">
+      <input type="text" list="mat-datalist" class="m-input b-mat-name" placeholder="Material name (e.g. Lining, Lace, Zipper)" value="${m.name || ''}" style="padding:8px 10px;font-size:13px;" onchange="recalcBookingLive()">
+      <datalist id="mat-datalist">${mOptions}</datalist>
+    </div>
+    <div class="form-grid-2">
+      <div>
+        <label style="font-size:10.5px;color:var(--dark-muted);display:block;margin-bottom:3px;">Qty / Details</label>
+        <input type="text" class="m-input b-mat-qty" placeholder="e.g. 2 mtr / 1 set" value="${m.qty || '1'}" style="padding:7px 10px;font-size:12.5px;">
+      </div>
+      <div>
+        <label style="font-size:10.5px;color:var(--dark-muted);display:block;margin-bottom:3px;">Cost (₹)</label>
+        <input type="number" class="m-input b-mat-cost" placeholder="0" value="${m.cost || ''}" style="padding:7px 10px;font-size:12.5px;" oninput="recalcBookingLive()">
+      </div>
+    </div>
+  `;
+  return div;
+}
+
+function addMaterialRow() {
+  const container = document.getElementById('booking-materials-rows');
+  const count = container.querySelectorAll('.dyn-row-card').length;
+  container.appendChild(createMaterialRowElement({}, count));
+  recalcBookingLive();
+}
+
+// ── LIVE RECALCULATION HELPER ──
+function recalcBookingLive() {
+  const custTotal = parseFloat(document.getElementById('b-total-amt').value) || 0;
+  const custPaid = parseFloat(document.getElementById('b-paid-amt').value) || 0;
+  const custDue = custTotal - custPaid;
+
+  // Sum workers
+  let workerLaborSum = 0;
+  document.querySelectorAll('#booking-workers-rows .b-worker-amt').forEach(el => {
+    workerLaborSum += (parseFloat(el.value) || 0);
+  });
+
+  // Sum materials
+  let materialCostSum = 0;
+  document.querySelectorAll('#booking-materials-rows .b-mat-cost').forEach(el => {
+    materialCostSum += (parseFloat(el.value) || 0);
+  });
+
+  const totalExpense = workerLaborSum + materialCostSum;
+  const netProfit = custTotal - totalExpense;
+
+  document.getElementById('calc-cust-due').textContent = `₹${custDue.toLocaleString('en-IN')}`;
+  document.getElementById('calc-worker-cost').textContent = `₹${workerLaborSum.toLocaleString('en-IN')}`;
+  document.getElementById('calc-mat-cost').textContent = `₹${materialCostSum.toLocaleString('en-IN')}`;
+  document.getElementById('calc-total-exp').textContent = `₹${totalExpense.toLocaleString('en-IN')}`;
+
+  const netProfitEl = document.getElementById('calc-net-profit');
+  netProfitEl.textContent = `₹${netProfit.toLocaleString('en-IN')}`;
+  netProfitEl.style.color = netProfit >= 0 ? '#34d399' : '#f87171';
+}
+
+// ── SAVE / DELETE BOOKING ──
+function saveBookingEntry(id) {
+  if (!guardAdmin()) return;
+  const custSelect = document.getElementById('b-cust-select');
+  const custName = custSelect.value.trim();
+  if (!custName) {
+    alert('Please select or add a customer.');
+    return;
+  }
+
+  // Extract worker rows
+  const workerCards = document.querySelectorAll('#booking-workers-rows .dyn-row-card');
+  const workerDetails = [];
+  workerCards.forEach(card => {
+    const name = card.querySelector('.b-worker-name').value.trim();
+    const role = card.querySelector('.b-worker-role').value.trim();
+    const amount = parseFloat(card.querySelector('.b-worker-amt').value) || 0;
+    const status = card.querySelector('.b-worker-status').value;
+    if (name) {
+      workerDetails.push({ workerName: name, role: role || 'Stitching', amount, status });
+    }
+  });
+
+  // Extract material rows
+  const matCards = document.querySelectorAll('#booking-materials-rows .dyn-row-card');
+  const materialDetails = [];
+  matCards.forEach(card => {
+    const name = card.querySelector('.b-mat-name').value.trim();
+    const qty = card.querySelector('.b-mat-qty').value.trim();
+    const cost = parseFloat(card.querySelector('.b-mat-cost').value) || 0;
+    if (name) {
+      materialDetails.push({ name, qty: qty || '1', cost, status: 'paid' });
+    }
+  });
+
+  const bookings = S.get('bookings') || [];
+  const entry = {
+    id: id || nextBookingId(),
+    customerName: custName,
+    customerPhone: document.getElementById('b-cust-phone').value.trim(),
+    garmentType: document.getElementById('b-garment').value.trim() || 'Custom Tailoring',
+    orderDate: document.getElementById('b-order-date').value,
+    deliveryDate: document.getElementById('b-delivery-date').value,
+    status: document.getElementById('b-status').value,
+    workerDetails: workerDetails,
+    materialDetails: materialDetails,
+    totalAmount: parseFloat(document.getElementById('b-total-amt').value) || 0,
+    paidAmount: parseFloat(document.getElementById('b-paid-amt').value) || 0,
+    notes: document.getElementById('b-notes').value.trim()
+  };
+
+  if (id) {
+    const idx = bookings.findIndex(b => b.id === id);
+    if (idx !== -1) bookings[idx] = entry;
+  } else {
+    bookings.push(entry);
+  }
+
+  S.set('bookings', bookings);
+  closeSheet();
+  renderDashboard();
+  filterBookings();
+  if (currentTab === 'payments') renderPaymentsHub();
+}
+
+function deleteBookingEntry(id) {
+  if (!guardAdmin()) return;
+  if (!confirm(`Are you sure you want to delete Booking ${id}?`)) return;
+  const bookings = (S.get('bookings') || []).filter(b => b.id !== id);
+  S.set('bookings', bookings);
+  closeSheet();
+  renderDashboard();
+  filterBookings();
+  if (currentTab === 'payments') renderPaymentsHub();
+}
+
+// ── QUICK PAYMENT UPDATER ──
+function openPaymentUpdater(id) {
+  if (!guardAdmin()) return;
+  const bookings = S.get('bookings') || [];
+  const b = bookings.find(x => x.id === id);
+  if (!b) return;
+
+  const total = parseFloat(b.totalAmount) || 0;
+  const paid = parseFloat(b.paidAmount) || 0;
+  const due = total - paid;
+
+  document.getElementById('sheet-title').textContent = `Collect Payment · #${b.id}`;
+  document.getElementById('sheet-body').innerHTML = `
+    <div style="background:var(--border-light);padding:12px;border-radius:10px;margin-bottom:14px;">
+      <div style="font-size:15px;font-weight:700;">${b.customerName}</div>
+      <div style="font-size:12px;color:var(--dark-muted);">${b.garmentType}</div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px;">
+        <span>Total Bill: <strong>₹${total.toLocaleString('en-IN')}</strong></span>
+        <span style="color:${due > 0 ? 'var(--warn)' : 'var(--success)'};font-weight:700;">Due: ₹${due.toLocaleString('en-IN')}</span>
+      </div>
+    </div>
+
+    <div class="m-form-group">
+      <label class="m-form-label">Total Amount Billed (₹)</label>
+      <input type="number" id="pay-total-inp" class="m-input" value="${total}">
+    </div>
+
+    <div class="m-form-group">
+      <label class="m-form-label">Total Amount Collected So Far (₹)</label>
+      <input type="number" id="pay-paid-inp" class="m-input" value="${paid}">
+    </div>
+
+    <div class="m-form-group">
+      <label class="m-form-label">Quick Add Today's Payment (₹)</label>
+      <div style="display:flex;gap:8px;">
+        <button type="button" class="filter-chip" onclick="document.getElementById('pay-paid-inp').value = ${total};">Mark Fully Paid (₹${due})</button>
+        <button type="button" class="filter-chip" onclick="document.getElementById('pay-paid-inp').value = ${paid + 500};">+ ₹500</button>
+        <button type="button" class="filter-chip" onclick="document.getElementById('pay-paid-inp').value = ${paid + 1000};">+ ₹1000</button>
+      </div>
+    </div>
+
+    <div class="m-form-group">
+      <label class="m-form-label">Payment Mode</label>
+      <select id="pay-mode-inp" class="m-select">
+        <option value="Cash">Cash</option>
+        <option value="GPay / UPI" selected>GPay / PhonePe / UPI</option>
+        <option value="Card">Debit / Credit Card</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+      </select>
+    </div>
+  `;
+
+  document.getElementById('sheet-footer').innerHTML = `
+    <button class="btn-secondary-m" style="flex:1;" onclick="closeSheet()">Cancel</button>
+    <button class="btn-primary-m" style="flex:2;" onclick="saveQuickPayment('${b.id}')">Update Payment</button>
+  `;
+
+  openSheet();
+}
+
+function saveQuickPayment(id) {
+  if (!guardAdmin()) return;
+  const bookings = S.get('bookings') || [];
+  const idx = bookings.findIndex(b => b.id === id);
+  if (idx !== -1) {
+    bookings[idx].totalAmount = parseFloat(document.getElementById('pay-total-inp').value) || 0;
+    bookings[idx].paidAmount = parseFloat(document.getElementById('pay-paid-inp').value) || 0;
+    bookings[idx].payMode = document.getElementById('pay-mode-inp').value;
+    S.set('bookings', bookings);
+  }
+  closeSheet();
+  renderDashboard();
+  filterBookings();
+  if (currentTab === 'payments') renderPaymentsHub();
+}
+
+// ── CUSTOMERS DIRECTORY ──
+function renderCustomers(q = '') {
+  const customers = S.get('customers') || [];
+  const bookings = S.get('bookings') || [];
+  const query = q.toLowerCase().trim();
+
+  const filtered = customers.filter(c =>
+    !query || c.name.toLowerCase().includes(query) || (c.phone || '').includes(query)
+  );
+
+  const container = document.getElementById('customers-container');
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="m-empty-state">
+        <div class="m-empty-icon">👥</div>
+        <div class="m-empty-title">${q ? 'No matching clients' : 'No clients added yet'}</div>
+        <div class="m-empty-sub">Tap "+ Add Customer" to save a new client with measurements.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(c => {
+    const clientBookings = bookings.filter(b => b.customerName === c.name);
+    const totalSpent = clientBookings.reduce((sum, b) => sum + (parseFloat(b.totalAmount) || 0), 0);
+
+    return `
+      <div class="order-card">
+        <div class="order-header">
+          <div>
+            <div class="order-cust-name">${c.name}</div>
+            <div class="order-work-title">📞 ${c.phone || 'No phone'} · 📍 ${c.address || 'Local'}</div>
+          </div>
+          <span class="m-badge badge-done">${clientBookings.length} Orders</span>
+        </div>
+
+        ${c.notes ? `
+        <div style="background:var(--border-light);padding:8px 10px;border-radius:8px;font-size:12px;margin:8px 0;color:var(--dark-muted);">
+          📏 <strong>Notes / Measurements:</strong> ${c.notes}
+        </div>` : ''}
+
+        <div style="font-size:11.5px;color:var(--dark-muted);display:flex;justify-content:space-between;margin:6px 0;">
+          <span>Lifetime Value: <strong>₹${totalSpent.toLocaleString('en-IN')}</strong></span>
+        </div>
+
+        <div class="card-action-bar admin-only">
+          <button class="btn-action-pill primary" onclick="openCustomerModal('${c.id}')">Edit Client</button>
+          <button class="btn-action-pill" onclick="startBookingForCustomer('${c.name}', '${c.phone||''}')">+ New Order</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function startBookingForCustomer(name, phone) {
+  if (!guardAdmin()) return;
+  openBookingModal();
+  setTimeout(() => {
+    const sel = document.getElementById('b-cust-select');
+    if (sel) sel.value = name;
+    if (document.getElementById('b-cust-phone')) document.getElementById('b-cust-phone').value = phone;
+  }, 50);
+}
+
+function openCustomerModal(id = null, returnToBooking = false) {
+  if (!guardAdmin()) return;
+  const store = S.get('customers') || [];
+  const c = id ? store.find(x => x.id === id) : null;
+
+  document.getElementById('sheet-title').textContent = id ? 'Edit Customer' : 'Add New Customer';
+  document.getElementById('sheet-body').innerHTML = `
+    <div class="m-form-group">
+      <label class="m-form-label">Client Full Name *</label>
+      <input type="text" id="fc-name" class="m-input" placeholder="e.g. Navjot Kaur" value="${c ? c.name : ''}">
+    </div>
+    <div class="m-form-group">
+      <label class="m-form-label">Mobile Number</label>
+      <input type="tel" id="fc-phone" class="m-input" placeholder="e.g. 9876543210" value="${c ? c.phone : ''}">
+    </div>
+    <div class="m-form-group">
+      <label class="m-form-label">Address / Location</label>
+      <input type="text" id="fc-addr" class="m-input" placeholder="e.g. Model Town / Sector 14" value="${c ? c.address : ''}">
+    </div>
+    <div class="m-form-group">
+      <label class="m-form-label">Body Measurements & Fitting Profile</label>
+      <textarea id="fc-notes" class="m-textarea" placeholder="Bust, Waist, Hip, Armhole, Length, Shoulder, Neck Preferences…">${c ? c.notes : ''}</textarea>
+    </div>
+  `;
+
+  document.getElementById('sheet-footer').innerHTML = `
+    <button class="btn-secondary-m" style="flex:1;" onclick="closeSheet()">Cancel</button>
+    ${id ? `<button class="btn-secondary-m" style="color:var(--danger);border-color:#fecaca;" onclick="deleteCustomer('${c.id}')">Delete</button>` : ''}
+    <button class="btn-primary-m" style="flex:2;" onclick="saveCustomer('${id || ''}', ${returnToBooking})">Save Customer</button>
+  `;
+
+  openSheet();
+}
+
+function saveCustomer(id, returnToBooking) {
+  if (!guardAdmin()) return;
+  const name = document.getElementById('fc-name').value.trim();
+  if (!name) { alert('Customer name is required.'); return; }
+
+  const store = S.get('customers') || [];
+  const entry = {
+    id: id || uid(),
+    name: name,
+    phone: document.getElementById('fc-phone').value.trim(),
+    address: document.getElementById('fc-addr').value.trim(),
+    notes: document.getElementById('fc-notes').value.trim()
+  };
+
+  if (id) {
+    const idx = store.findIndex(x => x.id === id);
+    if (idx !== -1) store[idx] = entry;
+  } else {
+    store.push(entry);
+  }
+
+  S.set('customers', store);
+  closeSheet();
+
+  if (returnToBooking) {
+    openBookingModal();
+    setTimeout(() => {
+      const sel = document.getElementById('b-cust-select');
+      if (sel) sel.value = entry.name;
+    }, 50);
+  } else {
+    renderCustomers();
+  }
+}
+
+function deleteCustomer(id) {
+  if (!guardAdmin()) return;
+  if (!confirm('Delete this customer?')) return;
+  const store = (S.get('customers') || []).filter(x => x.id !== id);
+  S.set('customers', store);
+  closeSheet();
+  renderCustomers();
+}
+
+// ── KARIGAR & WORKER MANAGEMENT ──
+function renderWorkers(q = '') {
+  const workers = S.get('workers') || [];
+  const bookings = S.get('bookings') || [];
+  const query = q.toLowerCase().trim();
+
+  const filtered = workers.filter(w =>
+    !query || w.name.toLowerCase().includes(query) || (w.skill || '').toLowerCase().includes(query)
+  );
+
+  const container = document.getElementById('workers-container');
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="m-empty-state">
+        <div class="m-empty-icon">🧵</div>
+        <div class="m-empty-title">No karigars found</div>
+        <div class="m-empty-sub">Add tailors, cutters and embroidery workers to manage their wages.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(w => {
+    // Calculate total earned across all bookings
+    let totalEarned = 0;
+    let totalPaid = 0;
+    let jobCount = 0;
+
+    bookings.forEach(b => {
+      const bWorkers = getNormalizedWorkers(b);
+      bWorkers.forEach(item => {
+        if (item.workerName === w.name) {
+          jobCount++;
+          const amt = parseFloat(item.amount) || 0;
+          totalEarned += amt;
+          if (item.status === 'paid') totalPaid += amt;
+        }
+      });
+    });
+
+    const balancePayable = totalEarned - totalPaid;
+
+    return `
+      <div class="ledger-card">
+        <div class="ledger-head">
+          <div>
+            <div class="ledger-name">${w.name}</div>
+            <div class="ledger-role">🎯 ${w.skill || 'Tailoring'} · 📞 ${w.phone || 'No phone'}</div>
+          </div>
+          <button class="btn-action-pill" onclick="openWorkerModal('${w.id}')" style="flex:none;padding:5px 10px;">Edit</button>
+        </div>
+
+        <div class="ledger-stats">
+          <div class="ledger-stat-item">
+            <p>Total Jobs</p>
+            <h5>${jobCount}</h5>
+          </div>
+          <div class="ledger-stat-item">
+            <p>Total Earned</p>
+            <h5>₹${totalEarned.toLocaleString('en-IN')}</h5>
+          </div>
+          <div class="ledger-stat-item">
+            <p>Balance Due</p>
+            <h5 style="color:${balancePayable > 0 ? 'var(--danger)' : 'var(--success)'}">₹${balancePayable.toLocaleString('en-IN')}</h5>
+          </div>
+        </div>
+
+        <div class="card-action-bar" style="margin-top:6px;">
+          <button class="btn-action-pill primary" onclick="openWorkerLedgerDetail('${w.name}')">
+            📋 View Jobs & Khata
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openWorkerModal(id = null) {
+  if (!guardAdmin()) return;
+  const store = S.get('workers') || [];
+  const w = id ? store.find(x => x.id === id) : null;
+
+  document.getElementById('sheet-title').textContent = id ? 'Edit Karigar' : 'Add New Karigar';
+  document.getElementById('sheet-body').innerHTML = `
+    <div class="m-form-group">
+      <label class="m-form-label">Worker Name *</label>
+      <input type="text" id="fw-name" class="m-input" placeholder="e.g. Ramesh Master" value="${w ? w.name : ''}">
+    </div>
+    <div class="m-form-group">
+      <label class="m-form-label">Mobile Number</label>
+      <input type="tel" id="fw-phone" class="m-input" placeholder="e.g. 9812345678" value="${w ? w.phone : ''}">
+    </div>
+    <div class="m-form-group">
+      <label class="m-form-label">Skill / Specialty</label>
+      <input type="text" id="fw-skill" class="m-input" placeholder="e.g. Master Cutter, Hand Embroidery, Blouse Specialist" value="${w ? w.skill : ''}">
+    </div>
+    <div class="m-form-group">
+      <label class="m-form-label">Notes</label>
+      <textarea id="fw-notes" class="m-textarea" placeholder="Daily/piece rate agreement, address, notes…">${w ? w.notes : ''}</textarea>
+    </div>
+  `;
+
+  document.getElementById('sheet-footer').innerHTML = `
+    <button class="btn-secondary-m" style="flex:1;" onclick="closeSheet()">Cancel</button>
+    ${id ? `<button class="btn-secondary-m" style="color:var(--danger);border-color:#fecaca;" onclick="deleteWorker('${w.id}')">Delete</button>` : ''}
+    <button class="btn-primary-m" style="flex:2;" onclick="saveWorker('${id || ''}')">Save Worker</button>
+  `;
+
+  openSheet();
+}
+
+function saveWorker(id) {
+  if (!guardAdmin()) return;
+  const name = document.getElementById('fw-name').value.trim();
+  if (!name) { alert('Worker name is required.'); return; }
+
+  const store = S.get('workers') || [];
+  const entry = {
+    id: id || uid(),
+    name: name,
+    phone: document.getElementById('fw-phone').value.trim(),
+    skill: document.getElementById('fw-skill').value.trim(),
+    notes: document.getElementById('fw-notes').value.trim()
+  };
+
+  if (id) {
+    const idx = store.findIndex(x => x.id === id);
+    if (idx !== -1) store[idx] = entry;
+  } else {
+    store.push(entry);
+  }
+
+  S.set('workers', store);
+  closeSheet();
+  renderWorkers();
+  if (currentTab === 'payments') renderPaymentsHub();
+}
+
+function deleteWorker(id) {
+  if (!guardAdmin()) return;
+  if (!confirm('Delete this worker?')) return;
+  const store = (S.get('workers') || []).filter(x => x.id !== id);
+  S.set('workers', store);
+  closeSheet();
+  renderWorkers();
+}
+
+// ── WORKER KHATA / DETAILED LEDGER SHEET ──
+function openWorkerLedgerDetail(workerName) {
+  const bookings = S.get('bookings') || [];
+  const assignedJobs = [];
+
+  bookings.forEach(b => {
+    const bWorkers = getNormalizedWorkers(b);
+    bWorkers.forEach((w, wIndex) => {
+      if (w.workerName === workerName) {
+        assignedJobs.push({
+          bookingId: b.id,
+          customerName: b.customerName,
+          garmentType: b.garmentType,
+          orderDate: b.orderDate,
+          role: w.role || 'Stitching',
+          amount: parseFloat(w.amount) || 0,
+          status: w.status || 'unpaid',
+          workerIndex: wIndex
+        });
+      }
+    });
+  });
+
+  const totalEarned = assignedJobs.reduce((sum, j) => sum + j.amount, 0);
+  const totalPaid = assignedJobs.filter(j => j.status === 'paid').reduce((sum, j) => sum + j.amount, 0);
+  const totalBalance = totalEarned - totalPaid;
+
+  document.getElementById('sheet-title').textContent = `Khata: ${workerName}`;
+  document.getElementById('sheet-body').innerHTML = `
+    <div style="background:var(--primary-light);border:1px solid #f3d7df;border-radius:12px;padding:12px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;font-weight:700;color:var(--primary-deep);">TOTAL BALANCE OWED</span>
+        <strong style="font-size:20px;color:var(--primary-deep);">₹${totalBalance.toLocaleString('en-IN')}</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--dark-muted);margin-top:6px;">
+        <span>Total Earned: ₹${totalEarned.toLocaleString('en-IN')}</span>
+        <span>Paid So Far: ₹${totalPaid.toLocaleString('en-IN')}</span>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-bottom:8px;">All Work Done by ${workerName}</div>
+    ${assignedJobs.length === 0 ? '<p style="font-size:12px;color:var(--light-muted);">No jobs assigned yet.</p>' :
+      assignedJobs.map(job => `
+        <div style="background:#fff;border:1px solid var(--border);border-radius:9px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:12.5px;font-weight:700;">#${job.bookingId} - ${job.customerName}</div>
+            <div style="font-size:11px;color:var(--dark-muted);">${job.garmentType} · <em>${job.role}</em></div>
+            <div style="font-size:10.5px;color:var(--light-muted);">${formatDateSimple(job.orderDate)}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:14px;font-weight:700;color:var(--dark);">₹${job.amount}</div>
+            <button class="filter-chip ${job.status==='paid'?'active':''}" style="font-size:10.5px;padding:2px 8px;margin-top:4px;" onclick="toggleWorkerJobPaid('${job.bookingId}', ${job.workerIndex})">
+              ${job.status==='paid' ? '✓ Paid' : (isAdmin() ? 'Mark Paid' : 'Unpaid')}
+            </button>
+          </div>
+        </div>
+      `).join('')
+    }
+  `;
+
+  document.getElementById('sheet-footer').innerHTML = `
+    <button class="btn-primary-m" onclick="closeSheet()">Close Ledger</button>
+  `;
+
+  openSheet();
+}
+
+function toggleWorkerJobPaid(bookingId, workerIndex) {
+  if (!guardAdmin()) return;
+  const bookings = S.get('bookings') || [];
+  const b = bookings.find(x => x.id === bookingId);
+  if (!b) return;
+
+  const workers = getNormalizedWorkers(b);
+  if (workers[workerIndex]) {
+    workers[workerIndex].status = workers[workerIndex].status === 'paid' ? 'unpaid' : 'paid';
+    b.workerDetails = workers;
+    S.set('bookings', bookings);
+    openWorkerLedgerDetail(workers[workerIndex].workerName);
+    renderDashboard();
+  }
+}
+
+// ── PAYMENTS & COMPLETE ACCOUNTS HUB ──
+function switchPaySubtab(tab, btn) {
+  ['customers', 'workers', 'materials', 'pnl'].forEach(t => {
+    const el = document.getElementById('paysub-' + t);
+    if (el) el.style.display = (t === tab) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.pay-subtabs .pay-subtab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  renderPaymentsHub(tab);
+}
+
+function renderPaymentsHub(activeSub = 'customers') {
+  const bookings = S.get('bookings') || [];
+  const workers = S.get('workers') || [];
+  const materials = S.get('materials') || [];
+
+  // 1. Customer Dues
+  let totalCustDue = 0;
+  const custDuesList = [];
+
+  bookings.forEach(b => {
+    const total = parseFloat(b.totalAmount) || 0;
+    const paid = parseFloat(b.paidAmount) || 0;
+    const due = total - paid;
+    if (due > 0) {
+      totalCustDue += due;
+      custDuesList.push({ ...b, dueAmount: due });
+    }
+  });
+
+  const dueLabel = document.getElementById('pay-total-cust-due');
+  if (dueLabel) dueLabel.textContent = `₹${totalCustDue.toLocaleString('en-IN')}`;
+
+  const custContainer = document.getElementById('customer-dues-list');
+  if (custContainer) {
+    if (custDuesList.length === 0) {
+      custContainer.innerHTML = `
+        <div class="m-empty-state">
+          <div class="m-empty-icon">🎉</div>
+          <div class="m-empty-title">All clear!</div>
+          <div class="m-empty-sub">No pending customer balances at the moment.</div>
+        </div>
+      `;
+    } else {
+      custContainer.innerHTML = custDuesList.map(b => `
+        <div class="order-card" style="margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <span class="order-id-tag">#${b.id}</span>
+              <div class="order-cust-name">${b.customerName}</div>
+              <div class="order-work-title">👗 ${b.garmentType}</div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:11px;color:var(--dark-muted);">Balance Due</span>
+              <div style="font-size:17px;font-weight:700;color:var(--warn);">₹${b.dueAmount.toLocaleString('en-IN')}</div>
+            </div>
+          </div>
+          <div class="card-action-bar" style="margin-top:8px;">
+            <button class="btn-action-pill primary" onclick="openPaymentUpdater('${b.id}')">Collect Payment</button>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // 2. Worker Khata Aggregates
+  let totalWorkersUnpaid = 0;
+  const workerKhataSummary = workers.map(w => {
+    let earned = 0;
+    let paid = 0;
+    bookings.forEach(b => {
+      const bWorkers = getNormalizedWorkers(b);
+      bWorkers.forEach(item => {
+        if (item.workerName === w.name) {
+          const a = parseFloat(item.amount) || 0;
+          earned += a;
+          if (item.status === 'paid') paid += a;
+        }
+      });
+    });
+    const due = earned - paid;
+    totalWorkersUnpaid += due;
+    return { ...w, earned, paid, due };
+  });
+
+  const workerDueLabel = document.getElementById('pay-total-worker-due');
+  if (workerDueLabel) workerDueLabel.textContent = `₹${totalWorkersUnpaid.toLocaleString('en-IN')}`;
+
+  const workerKhataContainer = document.getElementById('workers-khata-list');
+  if (workerKhataContainer) {
+    workerKhataContainer.innerHTML = workerKhataSummary.map(w => `
+      <div class="ledger-card" style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div class="ledger-name">${w.name}</div>
+            <div class="ledger-role">Earned: ₹${w.earned.toLocaleString('en-IN')} · Paid: ₹${w.paid.toLocaleString('en-IN')}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:16px;font-weight:700;color:${w.due > 0 ? 'var(--danger)' : 'var(--success)'};">
+              ₹${w.due.toLocaleString('en-IN')}
+            </div>
+            <span style="font-size:10px;color:var(--dark-muted);">${w.due > 0 ? 'Due to Pay' : 'Settled'}</span>
+          </div>
+        </div>
+        <button class="btn-action-pill" style="width:100%;margin-top:8px;" onclick="openWorkerLedgerDetail('${w.name}')">
+          View Detail & Mark Payments
+        </button>
+      </div>
+    `).join('');
+  }
+
+  // 3. Materials Summary
+  const matContainer = document.getElementById('materials-expense-list');
+  if (matContainer) {
+    matContainer.innerHTML = materials.map(m => `
+      <div class="ledger-card" style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div class="ledger-name">🪡 ${m.name}</div>
+            <div class="ledger-role">${m.type || 'Material'} · Stock: <strong>${m.stock || 'In stock'}</strong></div>
+          </div>
+          <button class="btn-action-pill" style="flex:none;" onclick="openMaterialModal('${m.id}')">Edit</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 4. Profit & Loss Detailed Statement
+  let totalBoutiqueRevenue = 0;
+  let totalBoutiqueLabor = 0;
+  let totalBoutiqueMaterials = 0;
+
+  bookings.forEach(b => {
+    totalBoutiqueRevenue += (parseFloat(b.totalAmount) || 0);
+    getNormalizedWorkers(b).forEach(w => {
+      totalBoutiqueLabor += (parseFloat(w.amount) || 0);
+    });
+    getNormalizedMaterials(b).forEach(m => {
+      totalBoutiqueMaterials += (parseFloat(m.cost) || 0);
+    });
+  });
+
+  const totalBoutiqueCosts = totalBoutiqueLabor + totalBoutiqueMaterials;
+  const netBoutiqueProfit = totalBoutiqueRevenue - totalBoutiqueCosts;
+  const marginPct = totalBoutiqueRevenue > 0 ? ((netBoutiqueProfit / totalBoutiqueRevenue) * 100).toFixed(1) : 0;
+
+  const pnlContainer = document.getElementById('pnl-summary-box');
+  if (pnlContainer) {
+    pnlContainer.innerHTML = `
+      <div class="order-card" style="background:#fff;border-radius:14px;padding:16px;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:12px;color:var(--dark);">
+          ✦ Kirat Boutique P&L Summary
+        </h3>
+
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+          <span>Gross Customer Revenue</span>
+          <strong style="color:var(--dark);">₹${totalBoutiqueRevenue.toLocaleString('en-IN')}</strong>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);color:var(--danger);">
+          <span>(-) Total Karigar Wages / Labor</span>
+          <strong>- ₹${totalBoutiqueLabor.toLocaleString('en-IN')}</strong>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);color:var(--danger);">
+          <span>(-) Total Fabrics & Supplies</span>
+          <strong>- ₹${totalBoutiqueMaterials.toLocaleString('en-IN')}</strong>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:2px solid var(--border);font-weight:700;">
+          <span>Total Boutique Operating Cost</span>
+          <span>₹${totalBoutiqueCosts.toLocaleString('en-IN')}</span>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;padding:12px 0 0;font-size:17px;font-weight:800;">
+          <span style="color:var(--primary-deep);">Net Boutique Profit:</span>
+          <span style="color:${netBoutiqueProfit >= 0 ? 'var(--success)' : 'var(--danger)'};">
+            ₹${netBoutiqueProfit.toLocaleString('en-IN')} <span style="font-size:12px;font-weight:600;">(${marginPct}% margin)</span>
+          </span>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// ── MATERIAL MODAL ──
+function openMaterialModal(id = null) {
+  if (!guardAdmin()) return;
+  const store = S.get('materials') || [];
+  const m = id ? store.find(x => x.id === id) : null;
+
+  document.getElementById('sheet-title').textContent = id ? 'Edit Material' : 'Add Material / Fabric';
+  document.getElementById('sheet-body').innerHTML = `
+    <div class="m-form-group">
+      <label class="m-form-label">Material Name *</label>
+      <input type="text" id="fm-name" class="m-input" placeholder="e.g. Silk Dupion, Cotton Astar, Zari Border" value="${m ? m.name : ''}">
+    </div>
+    <div class="form-grid-2">
+      <div class="m-form-group">
+        <label class="m-form-label">Type / Category</label>
+        <input type="text" id="fm-type" class="m-input" placeholder="e.g. Fabric / Trim / Accessory" value="${m ? m.type : ''}">
+      </div>
+      <div class="m-form-group">
+        <label class="m-form-label">Stock Quantity</label>
+        <input type="text" id="fm-stock" class="m-input" placeholder="e.g. 15 meters / 20 pcs" value="${m ? m.stock : ''}">
+      </div>
+    </div>
+    <div class="m-form-group">
+      <label class="m-form-label">Default / Unit Cost (₹)</label>
+      <input type="number" id="fm-cost" class="m-input" placeholder="e.g. 80" value="${m ? (m.defaultCost || '') : ''}">
+    </div>
+  `;
+
+  document.getElementById('sheet-footer').innerHTML = `
+    <button class="btn-secondary-m" style="flex:1;" onclick="closeSheet()">Cancel</button>
+    ${id ? `<button class="btn-secondary-m" style="color:var(--danger);border-color:#fecaca;" onclick="deleteMaterial('${m.id}')">Delete</button>` : ''}
+    <button class="btn-primary-m" style="flex:2;" onclick="saveMaterial('${id || ''}')">Save Material</button>
+  `;
+
+  openSheet();
+}
+
+function saveMaterial(id) {
+  if (!guardAdmin()) return;
+  const name = document.getElementById('fm-name').value.trim();
+  if (!name) { alert('Material name is required.'); return; }
+
+  const store = S.get('materials') || [];
+  const entry = {
+    id: id || uid(),
+    name: name,
+    type: document.getElementById('fm-type').value.trim(),
+    stock: document.getElementById('fm-stock').value.trim(),
+    defaultCost: parseFloat(document.getElementById('fm-cost').value) || 0
+  };
+
+  if (id) {
+    const idx = store.findIndex(x => x.id === id);
+    if (idx !== -1) store[idx] = entry;
+  } else {
+    store.push(entry);
+  }
+
+  S.set('materials', store);
+  closeSheet();
+  renderPaymentsHub();
+}
+
+function deleteMaterial(id) {
+  if (!guardAdmin()) return;
+  if (!confirm('Delete this material?')) return;
+  const store = (S.get('materials') || []).filter(x => x.id !== id);
+  S.set('materials', store);
+  closeSheet();
+  renderPaymentsHub();
+}
+
+// ── DATA FILE: SAVE / SHARE (ADMIN)  &  SYNC (VIEWER) ──
+function buildPayload() {
+  const c = S.get('creds') || {};
+  return {
+    appName: 'Kirat Boutique Manager',
+    format: 2,
+    exportDate: new Date().toISOString(),
+    profile: { boutiqueName: c.boutiqueName, name: c.name, phone: c.phone },  // login password is never included
+    customers: S.get('customers') || [],
+    workers: S.get('workers') || [],
+    materials: S.get('materials') || [],
+    bookings: S.get('bookings') || [],
+    counter: S.get('counter') || 1
+  };
+}
+
+function dataFileName() {
+  const d = new Date(), p = n => String(n).padStart(2, '0');
+  return `Kirat_Boutique_Data_${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}.json`;
+}
+
+function markExported() {
+  META.set('dirty', '0');
+  META.set('lastExport', new Date().toISOString());
+  refreshRoleBadge(); renderDataStatus();
+}
+
+function exportDataJSON() {
+  if (!guardAdmin()) return;
+  const blob = new Blob([JSON.stringify(buildPayload(), null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = dataFileName();
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  markExported();
+  alert('Backup file saved to your phone (usually the Downloads folder).\n\nTo send it to the Viewer phone, attach this .json file in WhatsApp.');
+}
+
+async function shareDataFile() {
+  if (!guardAdmin()) return;
+  const json = JSON.stringify(buildPayload(), null, 2);
+  const name = dataFileName();
+  for (const type of ['application/json', 'text/plain']) {
+    const file = new File([json], name, { type });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'Kirat Boutique Data' }); markExported(); return; }
+      catch (e) { if (e && e.name === 'AbortError') return; }
+    }
+  }
+  alert('Direct sharing is not available in this browser, so the file will be saved to your phone instead. Attach it manually in WhatsApp.');
+  exportDataJSON();
+}
+
+function importDataJSON(e) {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  const viewer = !isAdmin();
+
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data.bookings) && !Array.isArray(data.customers)) {
+        throw new Error('This is not a Kirat Boutique data file.');
+      }
+      const cur = META.get('dataAsOf');
+      if (viewer && cur && data.exportDate && data.exportDate < cur) {
+        if (!confirm('⚠️ This file is OLDER than the data already on this phone.\n\nSync anyway?')) return;
+      }
+      const when = data.exportDate ? new Date(data.exportDate).toLocaleString('en-IN') : 'unknown';
+      const summary = `Orders: ${(data.bookings||[]).length}\nClients: ${(data.customers||[]).length}\nKarigars: ${(data.workers||[]).length}\nFile created: ${when}`;
+      const ask = viewer ? 'Sync this data to this phone?' : 'RESTORE this file? ALL data on this phone will be replaced.';
+      if (!confirm(ask + '\n\n' + summary)) return;
+
+      S.allowWrite = true;
+      try {
+        S.set('customers', data.customers || []);
+        S.set('workers', data.workers || []);
+        S.set('materials', data.materials || []);
+        S.set('bookings', data.bookings || []);
+        S.set('counter', data.counter || 1);
+        const p = data.profile || data.creds || {};      // also accepts old backup files
+        const creds = S.get('creds') || {};
+        if (p.boutiqueName) creds.boutiqueName = p.boutiqueName;
+        if (p.name) creds.name = p.name;
+        if (p.phone !== undefined) creds.phone = p.phone;
+        S.set('creds', creds);
+      } finally { S.allowWrite = false; }
+
+      META.set('dataAsOf', data.exportDate || new Date().toISOString());
+      META.set('lastSync', new Date().toISOString());
+      if (isAdmin()) META.set('dirty', '0');
+      refreshRoleBadge();
+      alert(viewer ? '✅ Sync complete. You now have the latest data.' : '✅ Backup restored.');
+      const c = S.get('creds') || {};
+      document.getElementById('dash-user-name').textContent = c.name || 'Kirat';
+      showTab('dashboard');
+    } catch (err) {
+      alert('Could not read this file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function fmtDT(iso) {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }); }
+  catch (e) { return iso; }
+}
+
+function renderDataStatus() {
+  const el = document.getElementById('data-status');
+  if (!el) return;
+  const orders = (S.get('bookings') || []).length, clients = (S.get('customers') || []).length;
+  const row = (l, v) => `<div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:5px 0;border-bottom:1px solid var(--border-light);"><span style="color:var(--dark-muted)">${l}</span><strong style="text-align:right">${v}</strong></div>`;
+  let h = '';
+  if (isAdmin()) {
+    const due = META.get('dirty') === '1';
+    h += row('Phone type', '👑 Admin (full access)');
+    h += row('Last file saved / shared', fmtDT(META.get('lastExport')));
+    h += row('Status', due ? '<span style="color:var(--warn)">⚠ Changes not yet sent</span>' : '<span style="color:var(--success)">✓ Up to date</span>');
+  } else {
+    h += row('Phone type', '👁 Viewer (view only)');
+    h += row('Last synced', fmtDT(META.get('lastSync')));
+    h += row('Data is as of', fmtDT(META.get('dataAsOf')));
+  }
+  h += row('Orders / Clients', `${orders} / ${clients}`);
+  h += `<div style="font-size:11px;color:var(--dark-muted);margin-top:8px;line-height:1.5;">Data is stored privately inside this phone's browser storage. Keep the .json backup files as your safety copy.</div>`;
+  el.innerHTML = h;
+}
+
+function viewBookingDetails(id) {
+  const b = (S.get('bookings') || []).find(x => x.id === id);
+  if (!b) return;
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const inr = n => '₹' + (parseFloat(n) || 0).toLocaleString('en-IN');
+  const workers = getNormalizedWorkers(b), mats = getNormalizedMaterials(b);
+  const total = parseFloat(b.totalAmount) || 0, paid = parseFloat(b.paidAmount) || 0;
+  const wTot = workers.reduce((s, w) => s + (parseFloat(w.amount) || 0), 0);
+  const mTot = mats.reduce((s, m) => s + (parseFloat(m.cost) || 0), 0);
+  const row = (l, v) => `<div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--border-light);"><span style="color:var(--dark-muted)">${l}</span><strong style="text-align:right">${v}</strong></div>`;
+  const h3 = t => `<div style="font-size:13px;font-weight:700;margin:16px 0 6px;">${t}</div>`;
+
+  document.getElementById('sheet-title').textContent = `Order Details · #${b.id}`;
+  document.getElementById('sheet-body').innerHTML =
+    row('Customer', esc(b.customerName)) + row('Phone', esc(b.customerPhone) || '—') +
+    row('Garment', esc(b.garmentType)) + row('Status', esc(b.status)) +
+    row('Order date', esc(b.orderDate) || '—') + row('Delivery date', esc(b.deliveryDate) || '—') +
+    (b.notes ? row('Notes', esc(b.notes)) : '') +
+    h3('💰 Customer Payment') +
+    row('Total bill', inr(total)) + row('Paid', inr(paid)) +
+    row('Balance due', `<span style="color:${total - paid > 0 ? 'var(--warn)' : 'var(--success)'}">${inr(total - paid)}</span>`) +
+    (b.payMode ? row('Pay mode', esc(b.payMode)) : '') +
+    h3('🧵 Karigar Work') +
+    (workers.length ? workers.map(w => row(`${esc(w.workerName)} <em style="font-weight:400">(${esc(w.role)})</em>`, `${inr(w.amount)} · ${w.status === 'paid' ? '✓ Paid' : 'Unpaid'}`)).join('') : '<p style="font-size:12px;color:var(--light-muted)">None</p>') +
+    h3('🧶 Materials Used') +
+    (mats.length ? mats.map(m => row(`${esc(m.name)} <em style="font-weight:400">(${esc(m.qty)})</em>`, inr(m.cost))).join('') : '<p style="font-size:12px;color:var(--light-muted)">None</p>') +
+    h3('📊 Summary') +
+    row('Labor total', inr(wTot)) + row('Materials total', inr(mTot)) +
+    row('Boutique margin', `<span style="color:${total - wTot - mTot >= 0 ? 'var(--success)' : 'var(--danger)'}">${inr(total - wTot - mTot)}</span>`);
+  document.getElementById('sheet-footer').innerHTML = '<button class="btn-primary-m" onclick="closeSheet()">Close</button>';
+  openSheet();
+}
+
+// ── SETTINGS FORM ──
+function loadSettingsForm() {
+  const creds = S.get('creds') || {};
+  document.getElementById('cfg-bname').value = creds.boutiqueName || 'Kirat Boutique';
+  document.getElementById('cfg-owner').value = creds.name || 'Kirat';
+  document.getElementById('cfg-phone').value = creds.phone || '';
+  document.getElementById('cfg-user').value = creds.username || 'kirat';
+
+  renderDataStatus();
+}
+
+function saveBoutiqueSettings() {
+  if (!guardAdmin()) return;
+  const bName = document.getElementById('cfg-bname').value.trim();
+  const owner = document.getElementById('cfg-owner').value.trim();
+  const phone = document.getElementById('cfg-phone').value.trim();
+  const user = document.getElementById('cfg-user').value.trim();
+  const pass = document.getElementById('cfg-pass').value;
+
+  const creds = S.get('creds') || {};
+  creds.boutiqueName = bName || 'Kirat Boutique';
+  creds.name = owner || 'Kirat';
+  creds.phone = phone;
+  creds.username = user || 'kirat';
+  if (pass) creds.password = pass;
+
+  S.set('creds', creds);
+  document.getElementById('dash-user-name').textContent = creds.name;
+  const msg = document.getElementById('cfg-save-msg');
+  msg.style.color = 'var(--success)';
+  msg.textContent = 'Settings and profile saved successfully!';
+  setTimeout(() => msg.textContent = '', 2500);
+}
+
+// ── MODAL SHEET HELPERS ──
+function openSheet() {
+  const overlay = document.getElementById('sheet-overlay');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSheet() {
+  const overlay = document.getElementById('sheet-overlay');
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function closeSheetOutside(e) {
+  if (e.target === document.getElementById('sheet-overlay')) {
+    closeSheet();
+  }
+}
+
+function formatDateSimple(iso) {
+  if (!iso) return '—';
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+  } catch {
+    return iso;
+  }
+}
+
+// ── BOOTSTRAP APP ON LOAD ──
+window.addEventListener('DOMContentLoaded', () => {
+  initApp();
+});
+</script>
+</body>
+</html>

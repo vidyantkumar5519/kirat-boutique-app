@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kirat Boutique</string>
+    <string name="title_activity_main">Kirat Boutique</string>
+    <string name="package_name">com.kirat.boutique</string>
+    <string name="custom_url_scheme">com.kirat.boutique</string>
+</resources>
